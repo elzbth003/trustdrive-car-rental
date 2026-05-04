@@ -99,46 +99,52 @@
         will-change: background, padding;
     }
 
-    /* ── Transparent (hero state) ── */
+    /* ── Transparent (hero/home state) ── */
     .td-navbar--transparent { background: transparent; box-shadow: none; }
     .td-navbar--transparent .td-brand-text,
     .td-navbar--transparent .td-nav-link,
     .td-navbar--transparent .td-uname  { color: rgba(255,255,255,0.9) !important; }
     .td-navbar--transparent .td-bar    { background: #fff; }
     .td-navbar--transparent .td-book-btn {
-        border-color: rgba(255,255,255,0.55);
+        border-color: rgba(255,255,255,0.6);
         color: #fff;
         background: transparent;
     }
-    .td-navbar--transparent .td-book-btn:hover { background: #fff; color: #0f172a; }
+    .td-navbar--transparent .td-book-btn:hover { background: #fff; color: #0f172a; border-color: #fff; }
     .td-navbar--transparent .td-avatar  { background: #10b981; }
+    .td-navbar--transparent .td-uname,
+    .td-navbar--transparent .dropdown-toggle { color: rgba(255,255,255,0.9) !important; }
 
-    /* ── Solid (scrolled state) ── */
+    /* ── Solid (scrolled OR non-hero pages) ── */
     .td-navbar--solid {
         background: #0f172a;
-        box-shadow: 0 4px 24px rgba(0,0,0,0.18);
-        padding: 0.7rem 0;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+        padding: 0.75rem 0;
     }
-    .td-navbar--solid .td-brand-text,
-    .td-navbar--solid .td-uname  { color: #fff !important; }
-    .td-navbar--solid .td-nav-link { color: rgba(255,255,255,0.7) !important; }
-    .td-navbar--solid .td-nav-link:hover { color: #10b981 !important; }
-    .td-navbar--solid .td-bar     { background: #fff; }
+    .td-navbar--solid .td-brand-text { color: #fff !important; }
+    .td-navbar--solid .td-uname      { color: rgba(255,255,255,0.85) !important; }
+    .td-navbar--solid .td-nav-link   { color: rgba(255,255,255,0.72) !important; }
+    .td-navbar--solid .td-nav-link:hover,
+    .td-navbar--solid .td-nav-link.td-active { color: #10b981 !important; }
+    .td-navbar--solid .td-nav-link.td-active::after { transform: scaleX(1); }
+    .td-navbar--solid .td-bar        { background: #fff; }
     .td-navbar--solid .td-book-btn {
         background: #10b981;
         border-color: #10b981;
         color: #fff;
     }
     .td-navbar--solid .td-book-btn:hover { background: #059669; border-color: #059669; }
+    .td-navbar--solid .td-avatar  { background: #10b981; }
+    .td-navbar--solid .dropdown-toggle { color: rgba(255,255,255,0.85) !important; }
 
-    /* ── Nav link ── */
+    /* ── Nav link base ── */
     .td-nav-link {
         font-size: 0.78rem;
         font-weight: 700;
         letter-spacing: 1.5px;
         text-transform: uppercase;
         padding: 0.45rem 0.9rem !important;
-        transition: color 0.2s;
+        transition: color 0.2s ease;
         position: relative;
     }
     .td-nav-link::after {
@@ -149,11 +155,11 @@
         background: #10b981;
         transform: scaleX(0);
         transition: transform 0.25s ease;
+        transform-origin: left;
     }
-    .td-nav-link:hover::after,
-    .td-nav-link.active::after { transform: scaleX(1); }
+    .td-nav-link:hover::after { transform: scaleX(1); }
 
-    /* ── BOOK NOW button ── */
+    /* ── BOOK NOW CTA ── */
     .td-book-btn {
         display: inline-flex;
         align-items: center;
@@ -164,10 +170,11 @@
         text-transform: uppercase;
         text-decoration: none;
         border: 1.5px solid;
+        white-space: nowrap;
         transition: all 0.3s ease;
     }
 
-    /* ── Avatar & user pill ── */
+    /* ── Avatar ── */
     .td-avatar {
         width: 30px; height: 30px;
         background: #10b981;
@@ -178,43 +185,36 @@
         border-radius: 0;
         flex-shrink: 0;
     }
-    .td-user-pill { font-size: 0.78rem; font-weight: 600; }
-    .td-uname { font-size: 0.78rem; font-weight: 600; }
+    .td-user-pill  { font-size: 0.78rem; font-weight: 600; text-decoration: none; }
+    .td-uname      { font-size: 0.78rem; font-weight: 600; }
 
     /* ── Dropdown ── */
-    .td-dd { border-radius: 0; min-width: 220px; }
-    .td-dd-item { font-size: 0.83rem; padding: 0.55rem 1rem; transition: background 0.15s; }
-    .td-dd-item:hover { background: #f8fafc; }
+    .td-dd { border-radius: 0 !important; min-width: 220px; margin-top: 0.5rem !important; }
+    .td-dd-item { font-size: 0.83rem; padding: 0.6rem 1rem; transition: background 0.15s; }
+    .td-dd-item:hover { background: #f1f5f9; }
 
-    /* ── Custom hamburger ── */
+    /* ── Hamburger ── */
     .td-hamburger { display: flex; flex-direction: column; gap: 5px; }
     .td-bar { display: block; width: 22px; height: 2px; border-radius: 2px; transition: background 0.3s; }
 
-    /* Push page content below fixed navbar */
-    body > main,
-    body > .hero-cinematic,
-    section.hero-cinematic { padding-top: 0 !important; }
+    /* ── Page content offset for fixed nav ── */
+    main { padding-top: 80px; }
+    /* Home page: hero handles its own overlap — reset main offset */
+    body.page-home main { padding-top: 0; }
+
+    /* Mobile collapse styling */
+    @media (max-width: 991px) {
+        .td-navbar--transparent.navbar-open,
+        .td-navbar { background: #0f172a !important; }
+        .td-navbar .td-nav-link { color: rgba(255,255,255,0.8) !important; padding: 0.65rem 1rem !important; }
+        .td-navbar .td-nav-link:hover { color: #10b981 !important; }
+        .td-navbar .td-brand-text,
+        .td-navbar .td-uname { color: #fff !important; }
+        .td-navbar .td-bar { background: #fff; }
+    }
 
     .extra-small { font-size: 0.7rem; }
     </style>
-
-    <script>
-    (function () {
-        var nav = document.getElementById('mainNavbar');
-        if (!nav) return;
-        function handleScroll() {
-            if (window.scrollY > 60) {
-                nav.classList.remove('td-navbar--transparent');
-                nav.classList.add('td-navbar--solid');
-            } else {
-                nav.classList.remove('td-navbar--solid');
-                nav.classList.add('td-navbar--transparent');
-            }
-        }
-        window.addEventListener('scroll', handleScroll, { passive: true });
-        handleScroll();
-    })();
-    </script>
 
     <!-- Content -->
     <main>
@@ -284,5 +284,54 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'js/animations.js' %}?v=1.1"></script>
     {% block extra_js %}{% endblock %}
+
+    <script>
+    /* ═══ NAVBAR SCROLL + PAGE DETECTION ═══ */
+    (function () {
+        var nav = document.getElementById('mainNavbar');
+        if (!nav) return;
+
+        // Detect if this is the home page (has .hero-cinematic)
+        var hasHero = document.querySelector('.hero-cinematic') !== null;
+
+        // Mark body for CSS targeting
+        if (hasHero) document.body.classList.add('page-home');
+
+        function handleScroll() {
+            // On home: transparent at top, solid after scroll
+            // On other pages: always solid
+            if (hasHero && window.scrollY <= 60) {
+                nav.classList.remove('td-navbar--solid');
+                nav.classList.add('td-navbar--transparent');
+            } else {
+                nav.classList.remove('td-navbar--transparent');
+                nav.classList.add('td-navbar--solid');
+            }
+        }
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        handleScroll(); // run immediately on load
+
+        // Active link detection
+        var currentPath = window.location.pathname;
+        document.querySelectorAll('.td-nav-link').forEach(function(link) {
+            var href = link.getAttribute('href');
+            if (href && (currentPath === href || (href !== '/' && currentPath.startsWith(href)))) {
+                link.classList.add('td-active');
+            }
+        });
+
+        // Close mobile menu on link click
+        document.querySelectorAll('.td-nav-link').forEach(function(link) {
+            link.addEventListener('click', function() {
+                var collapse = document.getElementById('navbarNav');
+                if (collapse && collapse.classList.contains('show')) {
+                    var bsCollapse = bootstrap.Collapse.getInstance(collapse);
+                    if (bsCollapse) bsCollapse.hide();
+                }
+            });
+        });
+    })();
+    </script>
 </body>
 </html>
