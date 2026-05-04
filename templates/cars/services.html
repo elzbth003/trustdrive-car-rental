@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Cinematic Hero Header -->
+<section class="position-relative py-5 overflow-hidden" style="background: url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=1600') center/cover; min-height: 450px;">
+    <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.6) 100%);"></div>
+    <div class="container position-relative py-5 h-100 d-flex flex-column justify-content-center text-center">
+        <div class="row justify-content-center pt-5">
+            <div class="col-lg-8">
+                <span class="text-accent fw-bold extra-small uppercase ls-3 mb-3 d-block reveal reveal-up">The TrustDrive Standard</span>
+                <h1 class="display-3 fw-black text-white mb-4 ls-neg-2 reveal reveal-up">TAILORED <span class="text-accent">SOLUTIONS</span></h1>
+                <p class="lead text-white opacity-75 mb-0 mx-auto reveal reveal-up" style="max-width: 600px;">
+                    We provide more than just a car—we provide a seamless, premium experience designed around the demands of the modern discerning traveler.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Grid -->
+<section class="py-5 bg-white">
+    <div class="container py-5">
+        <div class="row g-5">
+            <!-- Service 1 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="p-5 border border-light h-100 transition-all-300 transform-hover-up shadow-sm bg-white rounded-0 reveal reveal-up">
+                    <div class="mb-4 d-inline-block p-3 bg-light-soft text-accent">
+                        <i class="bi bi-geo-alt fs-2"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark-blue mb-3 ls-1 uppercase">Concierge Delivery</h5>
+                    <div class="bg-accent mb-4" style="height: 2px; width: 40px;"></div>
+                    <p class="text-muted small mb-0 lh-lg">We deliver your chosen vehicle directly to your doorstep or airport terminal, ensuring a smooth transition to your journey with zero friction.</p>
+                </div>
+            </div>
+            <!-- Service 2 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="p-5 border border-light h-100 transition-all-300 transform-hover-up shadow-sm bg-white rounded-0 reveal reveal-up" style="transition-delay: 0.1s;">
+                    <div class="mb-4 d-inline-block p-3 bg-light-soft text-accent">
+                        <i class="bi bi-shield-check fs-2"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark-blue mb-3 ls-1 uppercase">Elite Insurance</h5>
+                    <div class="bg-accent mb-4" style="height: 2px; width: 40px;"></div>
+                    <p class="text-muted small mb-0 lh-lg">Comprehensive protection is standard. Every rental includes our premium coverage package, giving you complete peace of mind on the open road.</p>
+                </div>
+            </div>
+            <!-- Service 3 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="p-5 border border-light h-100 transition-all-300 transform-hover-up shadow-sm bg-white rounded-0 reveal reveal-up" style="transition-delay: 0.2s;">
+                    <div class="mb-4 d-inline-block p-3 bg-light-soft text-accent">
+                        <i class="bi bi-infinity fs-2"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark-blue mb-3 ls-1 uppercase">Unrestricted Miles</h5>
+                    <div class="bg-accent mb-4" style="height: 2px; width: 40px;"></div>
+                    <p class="text-muted small mb-0 lh-lg">Travel without boundaries. Our core fleet comes with unlimited mileage options, allowing for extensive explorations without any additional overhead.</p>
+                </div>
+            </div>
+            <!-- Service 4 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="p-5 border border-light h-100 transition-all-300 transform-hover-up shadow-sm bg-white rounded-0 reveal reveal-up">
+                    <div class="mb-4 d-inline-block p-3 bg-light-soft text-accent">
+                        <i class="bi bi-person-badge fs-2"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark-blue mb-3 ls-1 uppercase">Private Chauffeur</h5>
+                    <div class="bg-accent mb-4" style="height: 2px; width: 40px;"></div>
+                    <p class="text-muted small mb-0 lh-lg">For those who prefer a guided experience, our professional chauffeurs provide discreet, punctual, and high-end transport across any terrain.</p>
+                </div>
+            </div>
+            <!-- Service 5 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="p-5 border border-light h-100 transition-all-300 transform-hover-up shadow-sm bg-white rounded-0 reveal reveal-up" style="transition-delay: 0.1s;">
+                    <div class="mb-4 d-inline-block p-3 bg-light-soft text-accent">
+                        <i class="bi bi-headset fs-2"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark-blue mb-3 ls-1 uppercase">Expert Support</h5>
+                    <div class="bg-accent mb-4" style="height: 2px; width: 40px;"></div>
+                    <p class="text-muted small mb-0 lh-lg">Our dedicated concierge team is available around the clock to assist with route planning, technical support, or any emergency requirements.</p>
+                </div>
+            </div>
+            <!-- Service 6 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="p-5 border border-light h-100 transition-all-300 transform-hover-up shadow-sm bg-white rounded-0 reveal reveal-up" style="transition-delay: 0.2s;">
+                    <div class="mb-4 d-inline-block p-3 bg-light-soft text-accent">
+                        <i class="bi bi-calendar-event fs-2"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark-blue mb-3 ls-1 uppercase">Dynamic Leasing</h5>
+                    <div class="bg-accent mb-4" style="height: 2px; width: 40px;"></div>
+                    <p class="text-muted small mb-0 lh-lg">From high-impact single-day bookings to multi-month corporate lease programs, we offer flexible terms that adapt to your evolving schedule.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Final CTA Section -->
+<section class="py-5 bg-light-soft">
+    <div class="container text-center py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-7">
+                <h2 class="display-5 fw-bold text-dark-blue mb-4 ls-neg-1">Experience Excellence</h2>
+                <p class="text-muted mb-5 lead opacity-75">Join our exclusive circle of travelers who refuse to compromise on quality, performance, and style.</p>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    <a href="{% url 'car_list' %}" class="btn btn-dark-blue btn-lg px-5 py-3 fw-bold ls-2 rounded-0 shadow-lg transform-hover-up">
+                        EXPLORE THE COLLECTION
+                    </a>
+                    <a href="{% url 'contact' %}" class="btn btn-outline-dark-blue btn-lg px-5 py-3 fw-bold ls-2 rounded-0 transform-hover-up">
+                        CONSULT AN EXPERT
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .fw-black { font-weight: 900; }
+    .ls-neg-1 { letter-spacing: -1px; }
+    .ls-neg-2 { letter-spacing: -2px; }
+    .ls-1 { letter-spacing: 1px; }
+    .ls-2 { letter-spacing: 2px; }
+    .ls-3 { letter-spacing: 3px; }
+    .extra-small { font-size: 0.7rem; }
+    .text-dark-blue { color: #0f172a; }
+    .text-accent { color: #10b981; }
+    .bg-accent { background-color: #10b981; }
+    .bg-light-soft { background-color: #f8fafc; }
+    .bg-dark-blue { background-color: #0f172a; }
+    .btn-dark-blue { background-color: #0f172a; color: white; border: none; }
+    .btn-dark-blue:hover { background-color: #1e293b; color: white; }
+    .btn-outline-dark-blue { border: 1px solid #0f172a; color: #0f172a; }
+    .btn-outline-dark-blue:hover { background-color: #0f172a; color: white; }
+    .transition-all-300 { transition: all 0.3s ease; }
+    .transform-hover-up:hover { transform: translateY(-5px); }
+    .shadow-sm { shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); }
+    .reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out; }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const observerOptions = { threshold: 0.1 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    });
+</script>
+{% endblock %}

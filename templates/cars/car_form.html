@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="hero-section text-center position-relative overflow-hidden pt-4 pb-4">
+    <div class="watermark" style="top: 10%; right: -5%;">FLEET</div>
+    <div class="container py-3">
+        <h1 class="hero-text">Manage <span class="text-accent">Vehicle</span></h1>
+        <p class="text-muted lead mx-auto" style="max-width: 600px;">
+            {% if object %}Refine the details of your elite fleet member.{% else %}Expand your collection with a new high-end vehicle.{% endif %}
+        </p>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="p-5 bg-white border border-light shadow-sm">
+                    <div class="d-flex justify-content-between align-items-center mb-5">
+                        <h4 class="fw-bold mb-0">{% if object %}EDIT SPECIFICATIONS{% else %}REGISTER VEHICLE{% endif %}</h4>
+                        <a href="{% url 'car_list_admin' %}" class="btn btn-link text-muted text-decoration-none small fw-bold">BACK TO FLEET</a>
+                    </div>
+
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="row g-4">
+                            {% for field in form %}
+                                <div class="col-md-{% if field.name == 'description' or field.name == 'image' %}12{% else %}6{% endif %}">
+                                    <label class="small fw-bold text-muted mb-2 uppercase ls-1">{{ field.label }}</label>
+                                    {{ field }}
+                                    {% if field.errors %}
+                                        <div class="text-danger extra-small mt-1 fw-bold">{% for error in field.errors %}{{ error }}{% endfor %}</div>
+                                    {% endif %}
+                                    {% if field.help_text %}
+                                        <small class="text-muted d-block mt-1">{{ field.help_text|safe }}</small>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                            
+                            <div class="col-12 mt-5">
+                                <div class="d-flex gap-3">
+                                    <button type="submit" class="btn btn-primary px-5 py-3 fw-bold">SAVE CHANGES</button>
+                                    <a href="{% url 'car_list_admin' %}" class="btn btn-outline-dark-blue px-5 py-3 fw-bold">CANCEL</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .ls-1 { letter-spacing: 1px; }
+    .extra-small { font-size: 0.7rem; }
+    .form-control, .form-select, select.form-select {
+        border-radius: 0;
+        background: #f8f9fa;
+        border: 1px solid #eee;
+        padding: 1rem;
+        font-size: 0.9rem;
+        width: 100%;
+        appearance: none;
+    }
+    .form-control:focus, .form-select:focus, select.form-select:focus {
+        background: white;
+        border-color: #1D546D;
+        box-shadow: 0 0 0 4px rgba(29, 84, 109, 0.05);
+        outline: none;
+    }
+    textarea.form-control { min-height: 150px; }
+    
+    /* Image field specific styling */
+    input[type="file"] {
+        padding: 0.8rem;
+        background: #fff;
+        border: 1px dashed #ddd;
+    }
+</style>
+{% endblock %}

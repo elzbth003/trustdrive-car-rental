@@ -1,0 +1,288 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Car Rental System{% endblock %}</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/base.css' %}?v=1.1">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <!-- ═══ NAVBAR — Transparent → Solid on scroll ═══ -->
+    <nav class="td-navbar td-navbar--transparent navbar navbar-expand-lg" id="mainNavbar">
+        <div class="container">
+            <!-- Brand -->
+            <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+                <svg class="me-2" width="28" height="28" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2L4 5V11C4 16.1 7.4 20.8 12 22C16.6 20.8 20 16.1 20 11V5L12 2Z" fill="#10b981"/>
+                    <path d="M9 12L11 14L15 10" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="td-brand-text fw-bold">TRUST</span><span class="text-accent fw-black">DRIVE</span>
+            </a>
+
+            <!-- Mobile Toggler -->
+            <button class="navbar-toggler border-0 shadow-none p-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-label="Toggle navigation">
+                <div class="td-hamburger">
+                    <span class="td-bar"></span>
+                    <span class="td-bar"></span>
+                    <span class="td-bar"></span>
+                </div>
+            </button>
+
+            <!-- Links + CTA -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto gap-1">
+                    <li class="nav-item"><a class="nav-link td-nav-link" href="{% url 'home' %}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link td-nav-link" href="{% url 'car_list' %}">Fleet</a></li>
+                    <li class="nav-item"><a class="nav-link td-nav-link" href="{% url 'services' %}">Services</a></li>
+                    <li class="nav-item"><a class="nav-link td-nav-link" href="{% url 'about' %}">About</a></li>
+                    <li class="nav-item"><a class="nav-link td-nav-link" href="{% url 'contact' %}">Contact</a></li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-3">
+                    {% if user.is_authenticated %}
+                        <div class="dropdown">
+                            <a class="td-user-pill dropdown-toggle d-flex align-items-center gap-2 text-decoration-none" href="#" role="button" data-bs-toggle="dropdown">
+                                <div class="td-avatar">{{ user.username|slice:":1"|upper }}</div>
+                                <span class="td-uname d-none d-lg-block">{{ user.username }}</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end td-dd border-0 shadow-lg">
+                                <li class="px-3 py-2 border-bottom">
+                                    <p class="mb-0 small fw-bold text-dark">{{ user.username }}</p>
+                                    <p class="mb-0 extra-small text-muted">{{ user.email }}</p>
+                                </li>
+                                <li><a class="dropdown-item td-dd-item" href="{% url 'dashboard' %}"><i class="bi bi-speedometer2 me-2 text-accent"></i>My Dashboard</a></li>
+                                {% if user.role == 'admin' or user.is_superuser %}
+                                    <li><a class="dropdown-item td-dd-item fw-bold text-accent" href="/admin/"><i class="bi bi-shield-lock me-2"></i>System Admin</a></li>
+                                    <li><a class="dropdown-item td-dd-item" href="{% url 'admin_dashboard' %}"><i class="bi bi-grid me-2 text-muted"></i>Admin Dashboard</a></li>
+                                    <li><a class="dropdown-item td-dd-item" href="{% url 'staff_dashboard' %}"><i class="bi bi-people me-2 text-muted"></i>Staff Dashboard</a></li>
+                                {% elif user.role == 'staff' %}
+                                    <li><a class="dropdown-item td-dd-item" href="{% url 'staff_dashboard' %}"><i class="bi bi-people me-2 text-muted"></i>Staff Dashboard</a></li>
+                                {% endif %}
+                                <li><hr class="dropdown-divider my-1"></li>
+                                <li>
+                                    <form action="{% url 'logout' %}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="dropdown-item td-dd-item text-danger"><i class="bi bi-box-arrow-right me-2"></i>Logout</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    {% else %}
+                        <!-- BOOK NOW — goes to login; from there users can register -->
+                        <a href="{% url 'login' %}?next={% url 'car_list' %}" class="td-book-btn">
+                            BOOK NOW <i class="bi bi-arrow-right ms-2"></i>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <style>
+    /* ═══ FIXED NAVBAR ═══ */
+    .td-navbar {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        z-index: 1050;
+        padding: 1.4rem 0;
+        transition: background 0.4s ease, padding 0.4s ease, box-shadow 0.4s ease;
+        will-change: background, padding;
+    }
+
+    /* ── Transparent (hero state) ── */
+    .td-navbar--transparent { background: transparent; box-shadow: none; }
+    .td-navbar--transparent .td-brand-text,
+    .td-navbar--transparent .td-nav-link,
+    .td-navbar--transparent .td-uname  { color: rgba(255,255,255,0.9) !important; }
+    .td-navbar--transparent .td-bar    { background: #fff; }
+    .td-navbar--transparent .td-book-btn {
+        border-color: rgba(255,255,255,0.55);
+        color: #fff;
+        background: transparent;
+    }
+    .td-navbar--transparent .td-book-btn:hover { background: #fff; color: #0f172a; }
+    .td-navbar--transparent .td-avatar  { background: #10b981; }
+
+    /* ── Solid (scrolled state) ── */
+    .td-navbar--solid {
+        background: #0f172a;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+        padding: 0.7rem 0;
+    }
+    .td-navbar--solid .td-brand-text,
+    .td-navbar--solid .td-uname  { color: #fff !important; }
+    .td-navbar--solid .td-nav-link { color: rgba(255,255,255,0.7) !important; }
+    .td-navbar--solid .td-nav-link:hover { color: #10b981 !important; }
+    .td-navbar--solid .td-bar     { background: #fff; }
+    .td-navbar--solid .td-book-btn {
+        background: #10b981;
+        border-color: #10b981;
+        color: #fff;
+    }
+    .td-navbar--solid .td-book-btn:hover { background: #059669; border-color: #059669; }
+
+    /* ── Nav link ── */
+    .td-nav-link {
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        padding: 0.45rem 0.9rem !important;
+        transition: color 0.2s;
+        position: relative;
+    }
+    .td-nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 0.9rem; right: 0.9rem;
+        height: 2px;
+        background: #10b981;
+        transform: scaleX(0);
+        transition: transform 0.25s ease;
+    }
+    .td-nav-link:hover::after,
+    .td-nav-link.active::after { transform: scaleX(1); }
+
+    /* ── BOOK NOW button ── */
+    .td-book-btn {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.55rem 1.6rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        text-decoration: none;
+        border: 1.5px solid;
+        transition: all 0.3s ease;
+    }
+
+    /* ── Avatar & user pill ── */
+    .td-avatar {
+        width: 30px; height: 30px;
+        background: #10b981;
+        color: #fff;
+        font-size: 0.7rem;
+        font-weight: 800;
+        display: flex; align-items: center; justify-content: center;
+        border-radius: 0;
+        flex-shrink: 0;
+    }
+    .td-user-pill { font-size: 0.78rem; font-weight: 600; }
+    .td-uname { font-size: 0.78rem; font-weight: 600; }
+
+    /* ── Dropdown ── */
+    .td-dd { border-radius: 0; min-width: 220px; }
+    .td-dd-item { font-size: 0.83rem; padding: 0.55rem 1rem; transition: background 0.15s; }
+    .td-dd-item:hover { background: #f8fafc; }
+
+    /* ── Custom hamburger ── */
+    .td-hamburger { display: flex; flex-direction: column; gap: 5px; }
+    .td-bar { display: block; width: 22px; height: 2px; border-radius: 2px; transition: background 0.3s; }
+
+    /* Push page content below fixed navbar */
+    body > main,
+    body > .hero-cinematic,
+    section.hero-cinematic { padding-top: 0 !important; }
+
+    .extra-small { font-size: 0.7rem; }
+    </style>
+
+    <script>
+    (function () {
+        var nav = document.getElementById('mainNavbar');
+        if (!nav) return;
+        function handleScroll() {
+            if (window.scrollY > 60) {
+                nav.classList.remove('td-navbar--transparent');
+                nav.classList.add('td-navbar--solid');
+            } else {
+                nav.classList.remove('td-navbar--solid');
+                nav.classList.add('td-navbar--transparent');
+            }
+        }
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        handleScroll();
+    })();
+    </script>
+
+    <!-- Content -->
+    <main>
+        {% if messages %}
+            <div class="container mt-4">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} border-0 shadow-sm" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-5">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-md-4">
+                    <div class="mb-4">
+                        <div class="d-flex align-items-center">
+                            <svg class="me-2" width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L4 5V11C4 16.1 7.4 20.8 12 22C16.6 20.8 20 16.1 20 11V5L12 2Z" fill="#6082B6"/>
+                                <path d="M9 12L11 14L15 10" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="fw-bold fs-4 text-white">TRUST<span class="text-accent">DRIVE</span></span>
+                        </div>
+                    </div>
+                    <p class="mb-4 text-light opacity-75">Sophisticated mobility solutions for the discerning individual.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-white opacity-50 fs-5"><i class="bi bi-linkedin"></i></a>
+                        <a href="#" class="text-white opacity-50 fs-5"><i class="bi bi-twitter-x"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <h6 class="mb-4">Navigation</h6>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><a href="{% url 'car_list' %}" class="text-white-50 text-decoration-none">Fleet</a></li>
+                        <li class="mb-2"><a href="{% url 'services' %}" class="text-white-50 text-decoration-none">Services</a></li>
+                        <li class="mb-2"><a href="{% url 'about' %}" class="text-white-50 text-decoration-none">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h6 class="mb-4">Contact</h6>
+                    <p class="small mb-2 text-white-50"><i class="bi bi-geo-alt text-accent me-2"></i> 11 Elegant Plaza, Mayfair</p>
+                    <p class="small mb-0 text-white-50"><i class="bi bi-telephone text-accent me-2"></i> +1 800 TRUST</p>
+                </div>
+                <div class="col-md-3">
+                    <h6 class="mb-4">Newsletter</h6>
+                    <form>
+                        <div class="input-group">
+                            <input type="email" class="form-control form-control-sm bg-dark border-0 text-white" placeholder="Email">
+                            <button class="btn btn-primary btn-sm">Join</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="text-center mt-5 pt-4 border-top border-white border-opacity-10">
+                <p class="text-white-50 extra-small">&copy; 2026 TRUSTDRIVE. ALL RIGHTS RESERVED.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/animations.js' %}?v=1.1"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

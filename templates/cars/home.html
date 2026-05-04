@@ -1,0 +1,433 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- ══════════════════════════════════════
+     CINEMATIC HERO SECTION
+══════════════════════════════════════ -->
+<section class="hero-cinematic">
+
+    <!-- Login & Sign In Buttons Redesign (Logic in base.html, but checking context here) -->
+    <div class="hero-bg">
+        <img src="https://images.unsplash.com/photo-1494905998402-395d579af36f?q=80&w=1200" alt="TrustDrive Premium Fleet" class="hero-bg-img" id="heroBgImg">
+        <!-- Neutral Gradient overlays -->
+        <div class="hero-overlay-clean"></div>
+    </div>
+
+    <!-- Content -->
+    <div class="hero-cin-body">
+        <div class="container">
+            <div class="row align-items-center">
+
+                <!-- Left: Headline -->
+                <div class="col-lg-7">
+                    <div class="hero-cin-text">
+                        <span class="hero-cin-tag hero-anim-1">PREMIUM FLEET</span>
+                        <h1 class="hero-cin-heading hero-anim-2">
+                            Elevate Your Journey.<br>
+                            Drive Excellence.
+                        </h1>
+                        <p class="hero-cin-subheading hero-anim-3">Experience the pinnacle of luxury car rental with our curated world-class collection.</p>
+                        <div class="d-flex gap-3 flex-wrap mt-5 hero-anim-4">
+                            <a href="{% url 'car_list' %}" class="btn btn-primary px-5">EXPLORE FLEET</a>
+                            <a href="{% url 'services' %}" class="btn btn-outline-primary" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); color: white;">OUR SERVICES</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Integrated Search Bar -->
+    <div class="hero-search-bar hero-anim-6">
+        <div class="container">
+            <form method="get" action="{% url 'car_list' %}" class="hero-search-form">
+                <div class="hero-search-inner">
+
+                    <div class="hero-search-field hero-search-main">
+                        <label class="hsf-label">Find a Car</label>
+                        <div class="hsf-input-wrap">
+                            <i class="bi bi-search hsf-icon"></i>
+                            <input type="text" name="q" placeholder="Brand, model..." class="hsf-input">
+                        </div>
+                    </div>
+
+                    <div class="hero-search-sep"></div>
+
+                    <div class="hero-search-field">
+                        <label class="hsf-label">Vehicle Type</label>
+                        <div class="hsf-input-wrap">
+                            <i class="bi bi-grid-3x3-gap-fill hsf-icon"></i>
+                            <select name="type" class="hsf-input hsf-select">
+                                <option value="">All Types</option>
+                                <option value="sedan">Sedan</option>
+                                <option value="suv">SUV</option>
+                                <option value="luxury">Luxury</option>
+                                <option value="hatchback">Hatchback</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="hero-search-sep"></div>
+
+                    <div class="hero-search-field">
+                        <label class="hsf-label">Max Budget</label>
+                        <div class="hsf-input-wrap">
+                            <i class="bi bi-wallet2 hsf-icon"></i>
+                            <input type="number" name="max_price" placeholder="$ per day" class="hsf-input">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="hero-search-btn">
+                        Show Cars <i class="bi bi-chevron-right ms-1"></i>
+                    </button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+</section>
+
+<style>
+/* ══ CINEMATIC HERO ══ */
+.hero-cinematic {
+    position: relative;
+    width: 100%;
+    height: 90vh;
+    min-height: 650px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    background: #000; /* Dark base for cinematic look */
+}
+
+/* Background image */
+.hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.hero-bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+    filter: brightness(0.95);
+    will-change: transform;
+}
+
+/* Black Gradient Overlay */
+.hero-overlay-clean {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to right,
+        rgba(15, 23, 42, 0.95) 0%,
+        rgba(15, 23, 42, 0.8) 30%,
+        rgba(15, 23, 42, 0.4) 60%,
+        transparent 100%
+    );
+}
+
+/* ── Staggered entrance animations ── */
+@keyframes heroFadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero-anim-1 { animation: heroFadeUp 0.6s ease 0.1s both; }
+.hero-anim-2 { animation: heroFadeUp 0.6s ease 0.2s both; }
+.hero-anim-3 { animation: heroFadeUp 0.6s ease 0.3s both; }
+.hero-anim-4 { animation: heroFadeUp 0.6s ease 0.4s both; }
+.hero-anim-6 { animation: heroFadeUp 0.6s ease 0.5s both; }
+
+/* ── Body content ── */
+.hero-cin-body {
+    position: relative;
+    z-index: 2;
+}
+
+/* Tag */
+.hero-cin-tag {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #cbd5e1;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 0.5rem 1.25rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+}
+
+/* Headline */
+.hero-cin-heading {
+    font-size: clamp(3rem, 7vw, 5rem);
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.1;
+    letter-spacing: -2px;
+    margin: 0 0 1.5rem 0;
+}
+
+.hero-cin-subheading {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.25rem;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    max-width: 550px;
+    line-height: 1.6;
+}
+
+/* ══ SEARCH BAR ══ */
+.hero-search-bar {
+    position: relative;
+    z-index: 3;
+    background: transparent;
+    padding: 2rem 0;
+}
+
+.hero-search-inner {
+    display: flex;
+    align-items: stretch;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0;
+    overflow: hidden;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+}
+
+/* Each field */
+.hero-search-field {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1.25rem 1.75rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.hero-search-main { flex: 1.5; }
+
+/* Label above input */
+.hsf-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #94a3b8;
+    margin-bottom: 0.4rem;
+}
+
+/* Input row with icon */
+.hsf-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.hsf-icon {
+    color: #3b82f6;
+    font-size: 1rem;
+}
+
+.hsf-input {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0f172a;
+    width: 100%;
+    padding: 0;
+}
+
+/* Vertical separator */
+.hero-search-sep {
+    width: 1px;
+    background: #e2e8f0;
+    margin: 1.25rem 0;
+}
+
+/* Submit button */
+.hero-search-btn {
+    background: #0f172a;
+    color: #ffffff;
+    border: none;
+    padding: 0 2.5rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.hero-search-btn:hover { background: #1e293b; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-cinematic { height: auto; min-height: 100vh; }
+    .hero-cin-heading { font-size: 2.5rem; letter-spacing: -1px; }
+    .hero-search-inner {
+        flex-direction: column;
+        border-radius: 12px;
+        overflow: visible;
+        border: none;
+        gap: 0.5rem;
+        background: transparent;
+        box-shadow: none;
+    }
+    .hero-search-field {
+        background: #fff;
+        border: 1.5px solid #e8edf3;
+        border-radius: 10px;
+    }
+    .hero-search-sep { display: none; }
+    .hero-search-btn { border-radius: 10px; padding: 1rem; width: 100%; }
+    .hero-cin-desc p { max-width: 100%; }
+}
+
+@media (max-width: 992px) {
+    .hero-cin-desc { padding-top: 2rem; }
+}
+</style>
+
+<!-- ══════════════════════════════════════
+     EXCLUSIVE LUXURY COLLECTION
+══════════════════════════════════════ -->
+<section class="py-5 bg-white">
+    <div class="container py-5">
+        <div class="row g-5 align-items-center">
+            
+            <!-- Left: Featured Vehicle Image -->
+            <div class="col-lg-5 reveal reveal-left">
+                <div class="position-relative overflow-hidden shadow-2xl">
+                    <img src="https://images.unsplash.com/photo-1520031441872-265e4ff70366?auto=format&fit=crop&q=80&w=800" alt="Featured Brabus" class="img-fluid w-100 object-fit-cover grayscale-hover transition-all-500" style="height: 600px;">
+                    <div class="position-absolute bottom-0 start-0 p-4 bg-dark-blue text-white ls-2 fw-bold uppercase small">
+                        FEATURED / BRABUS G900
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Text & Mini Grid -->
+            <div class="col-lg-7">
+                <div class="ps-lg-4">
+                    <div class="position-relative d-inline-block mb-3 reveal reveal-up">
+                        <div class="position-absolute start-0 bottom-0 w-75 bg-accent opacity-20" style="height: 30%; transform: translateY(-5px); z-index: -1;"></div>
+                        <h2 class="display-5 fw-black text-dark-blue mb-0 ls-neg-1">Explore Our Exclusive <br>Luxury Car Collection.</h2>
+                    </div>
+                    <p class="text-muted lead mb-5 opacity-75 reveal reveal-up">Premium vehicles curated for your ultimate driving experience.</p>
+
+                    <!-- Mini Grid of Featured Cars -->
+                    <div class="row g-4 mb-5 stagger-children">
+                        {% for car in featured_cars|slice:":3" %}
+                        <div class="col-md-4">
+                            <div class="position-relative bg-light-soft p-3 transition-all-300 transform-hover-up border border-transparent hover-border-light h-100">
+                                <a href="{% url 'car_detail' car.pk %}" class="text-decoration-none">
+                                    <div class="mb-3 overflow-hidden" style="height: 140px;">
+                                        {% if car.image %}
+                                            <img src="{{ car.image.url }}" alt="{{ car.name }}" class="img-fluid w-100 h-100 object-fit-cover transition-all-500 transform-hover-110">
+                                        {% else %}
+                                            <div class="w-100 h-100 d-flex align-items-center justify-content-center opacity-25">
+                                                <i class="bi bi-car-front fs-2"></i>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-end">
+                                        <div>
+                                            <span class="text-muted extra-small fw-bold ls-1 uppercase d-block mb-1" style="font-size: 0.6rem;">{{ car.brand }}</span>
+                                            <h6 class="fw-bold text-dark-blue mb-1" style="font-size: 0.85rem;">{{ car.name|upper }}</h6>
+                                            <span class="fw-black text-dark-blue">₹{{ car.daily_rate|floatformat:0 }}</span><span class="text-muted extra-small">/day</span>
+                                        </div>
+                                        <div class="bg-dark-blue text-white p-2 px-3">
+                                            <i class="bi bi-arrow-up-right"></i>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- View All Button -->
+                    <div class="reveal reveal-up">
+                        <a href="{% url 'car_list' %}" class="btn btn-dark-blue px-5 py-3 fw-bold ls-2 rounded-0 d-inline-flex align-items-center gap-3 transform-hover-up shadow-lg">
+                            VIEW ALL COLLECTION <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ── LIVE STATS COUNTER BAR ── -->
+<section class="py-5 bg-dark-blue text-white overflow-hidden">
+    <div class="container py-3">
+        <div class="row g-4 text-center justify-content-center">
+            <div class="col-6 col-md-3">
+                <div class="p-4 reveal reveal-up">
+                    <div class="display-5 fw-black text-accent mb-1" data-count="500" data-suffix="+">500+</div>
+                    <p class="text-white opacity-50 extra-small fw-bold text-uppercase ls-2 mb-0">Premium Vehicles</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="p-4 reveal reveal-up" style="transition-delay: 0.1s;">
+                    <div class="display-5 fw-black text-accent mb-1" data-count="12000" data-suffix="+">12,000+</div>
+                    <p class="text-white opacity-50 extra-small fw-bold text-uppercase ls-2 mb-0">Happy Clients</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="p-4 reveal reveal-up" style="transition-delay: 0.2s;">
+                    <div class="display-5 fw-black text-accent mb-1" data-count="98" data-suffix="%">98%</div>
+                    <p class="text-white opacity-50 extra-small fw-bold text-uppercase ls-2 mb-0">Satisfaction Rate</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="p-4 reveal reveal-up" style="transition-delay: 0.3s;">
+                    <div class="display-5 fw-black text-accent mb-1" data-count="24" data-suffix="/7">24/7</div>
+                    <p class="text-white opacity-50 extra-small fw-bold text-uppercase ls-2 mb-0">Support Available</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-white border-top border-light overflow-hidden">
+    <div class="container py-5">
+        <div class="row align-items-center g-5 text-center text-lg-start">
+            <div class="col-lg-6 reveal reveal-right">
+                <div class="accent-bar mb-4"></div>
+                <h2 class="fw-bold mb-4 h1">Crafting Seamless Experiences</h2>
+                <p class="text-muted mb-5 lead">
+                    We believe every journey should be as remarkable as the vehicle you drive. Our commitment to quality ensures every rental is backed by our signature white-glove service and attention to detail.
+                </p>
+                <div class="d-flex flex-column flex-sm-row gap-5 justify-content-center justify-content-lg-start">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-shield-check text-accent fs-4"></i>
+                        <span class="fw-bold small ls-1">CURATED FLEET</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-globe-americas text-accent fs-4"></i>
+                        <span class="fw-bold small ls-1">GLOBAL COVERAGE</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 reveal reveal-left">
+                <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=800" alt="Premium Driving Experience" class="img-fluid rounded-4 shadow-lg border border-light">
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .ls-1 { letter-spacing: 1px; }
+    .extra-small { font-size: 0.7rem; }
+</style>
+{% endblock %}

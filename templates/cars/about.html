@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Cinematic Hero Header -->
+<section class="position-relative py-5 overflow-hidden" style="background: url('https://images.unsplash.com/photo-1526726538690-5cbf956ae2fd?auto=format&fit=crop&q=80&w=1600') center/cover; min-height: 450px;">
+    <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.6) 100%);"></div>
+    <div class="container position-relative py-5 h-100 d-flex flex-column justify-content-center text-center">
+        <div class="row justify-content-center pt-5">
+            <div class="col-lg-8">
+                <span class="text-accent fw-bold extra-small uppercase ls-3 mb-3 d-block reveal reveal-up">Established Excellence</span>
+                <h1 class="display-3 fw-black text-white mb-4 ls-neg-2 reveal reveal-up">THE <span class="text-accent">STORY</span></h1>
+                <p class="lead text-white opacity-75 mb-0 mx-auto reveal reveal-up" style="max-width: 600px;">
+                    Driven by a singular vision to redefine the automotive rental experience through transparency, precision, and unparalleled service.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Journey Section -->
+<section class="py-5 bg-white border-bottom border-light">
+    <div class="container py-5">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6 reveal reveal-left">
+                <div class="position-relative">
+                    <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=1000" alt="TrustDrive Concept" class="img-fluid rounded-0 shadow-2xl grayscale-hover transition-all-500">
+                    <div class="position-absolute bottom-0 end-0 p-4 bg-accent text-white ls-2 fw-bold uppercase small d-none d-md-block">
+                        Est. 2024
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 reveal reveal-right">
+                <div class="ps-lg-4">
+                    <span class="text-accent fw-bold extra-small uppercase ls-2 mb-3 d-block">Innovation</span>
+                    <h2 class="display-5 fw-bold text-dark-blue mb-4 ls-neg-1">Precision in Every Mile</h2>
+                    <p class="text-muted lead mb-5 lh-lg">
+                        At TrustDrive, we believe that renting a high-performance vehicle should be as technical and refined as the machines themselves. We've built an ecosystem where elite engineering meets seamless digital convenience.
+                    </p>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="p-4 border-start border-3 border-accent bg-light-soft rounded-0">
+                                <h6 class="fw-bold text-dark-blue mb-2 uppercase ls-1">Elite Verification</h6>
+                                <p class="extra-small text-muted mb-0">Every vehicle undergoes a 200-point diagnostic check before entering our registry.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-4 border-start border-3 border-accent bg-light-soft rounded-0">
+                                <h6 class="fw-bold text-dark-blue mb-2 uppercase ls-1">Rapid Dispatch</h6>
+                                <p class="extra-small text-muted mb-0">Experience a fully digital booking workflow designed for maximum efficiency.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Values Section -->
+<section class="py-5 bg-light-soft">
+    <div class="container py-5">
+        <div class="text-center mb-5 reveal reveal-up">
+            <h2 class="display-5 fw-bold text-dark-blue mb-3 ls-neg-1">Our Core Values</h2>
+            <p class="text-muted lead opacity-75">The architectural foundation of the TrustDrive standard.</p>
+        </div>
+        <div class="row g-4">
+            <!-- Value 1 -->
+            <div class="col-md-4">
+                <div class="p-5 bg-white border border-light h-100 transition-all-300 transform-hover-up shadow-sm rounded-0 reveal reveal-up">
+                    <div class="mb-4 text-accent">
+                        <i class="bi bi-gear-wide-connected fs-1"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark-blue mb-3 ls-1 uppercase">Performance</h5>
+                    <div class="bg-accent mb-4" style="height: 2px; width: 40px;"></div>
+                    <p class="text-muted small mb-0 lh-lg">We maintain a curated selection of vehicles that meet rigorous performance and aesthetic standards, ensuring zero compromise.</p>
+                </div>
+            </div>
+            <!-- Value 2 -->
+            <div class="col-md-4">
+                <div class="p-5 bg-white border border-light h-100 transition-all-300 transform-hover-up shadow-sm rounded-0 reveal reveal-up" style="transition-delay: 0.1s;">
+                    <div class="mb-4 text-accent">
+                        <i class="bi bi-shield-check fs-1"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark-blue mb-3 ls-1 uppercase">Integrity</h5>
+                    <div class="bg-accent mb-4" style="height: 2px; width: 40px;"></div>
+                    <p class="text-muted small mb-0 lh-lg">Full transparency in pricing and vehicle history. What you see in our digital showroom is exactly what you drive.</p>
+                </div>
+            </div>
+            <!-- Value 3 -->
+            <div class="col-md-4">
+                <div class="p-5 bg-white border border-light h-100 transition-all-300 transform-hover-up shadow-sm rounded-0 reveal reveal-up" style="transition-delay: 0.2s;">
+                    <div class="mb-4 text-accent">
+                        <i class="bi bi-cpu fs-1"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark-blue mb-3 ls-1 uppercase">Innovation</h5>
+                    <div class="bg-accent mb-4" style="height: 2px; width: 40px;"></div>
+                    <p class="text-muted small mb-0 lh-lg">Continuously evolving our platform to integrate the latest in automotive technology and customer-centric features.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-5 bg-dark-blue text-white overflow-hidden position-relative">
+    <div class="container py-5 text-center position-relative z-1">
+        <h2 class="display-4 fw-black mb-4 ls-neg-2">Join the Future of Rental</h2>
+        <p class="lead opacity-75 mb-5 mx-auto" style="max-width: 600px;">Connect with our collection and experience the new benchmark in automotive mobility.</p>
+        <a href="{% url 'car_list' %}" class="btn btn-accent btn-lg px-5 py-3 fw-bold ls-2 rounded-0 transform-hover-up shadow-lg">
+            BROWSE REGISTRY
+        </a>
+    </div>
+    <!-- Decorative background -->
+    <div class="position-absolute top-0 start-0 w-100 h-100 opacity-10" style="background: url('https://images.unsplash.com/photo-1542362567-b058c02b9ac8?auto=format&fit=crop&q=80&w=1600') center/cover;"></div>
+</section>
+
+<style>
+    .fw-black { font-weight: 900; }
+    .ls-neg-1 { letter-spacing: -1px; }
+    .ls-neg-2 { letter-spacing: -2px; }
+    .ls-1 { letter-spacing: 1px; }
+    .ls-2 { letter-spacing: 2px; }
+    .ls-3 { letter-spacing: 3px; }
+    .extra-small { font-size: 0.7rem; }
+    .text-dark-blue { color: #0f172a; }
+    .text-accent { color: #10b981; }
+    .bg-accent { background-color: #10b981; }
+    .bg-light-soft { background-color: #f8fafc; }
+    .bg-dark-blue { background-color: #0f172a; }
+    .btn-accent { background-color: #10b981; color: white; border: none; }
+    .btn-accent:hover { background-color: #059669; color: white; }
+    .transition-all-300 { transition: all 0.3s ease; }
+    .transition-all-500 { transition: all 0.5s ease; }
+    .transform-hover-up:hover { transform: translateY(-5px); }
+    .grayscale-hover { filter: grayscale(100%); }
+    .grayscale-hover:hover { filter: grayscale(0%); }
+    .reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out; }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+    .reveal-left { transform: translateX(-30px); }
+    .reveal-right { transform: translateX(30px); }
+    .reveal-left.active, .reveal-right.active { transform: translateX(0); opacity: 1; }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const observerOptions = { threshold: 0.1 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    });
+</script>
+{% endblock %}

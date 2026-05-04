@@ -1,0 +1,465 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="auth-wrapper">
+
+    <!-- LEFT PANEL -->
+    <div class="auth-left">
+        <div class="auth-left-inner">
+            <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=1200" alt="Luxury Car" class="auth-car-image">
+            <div class="auth-left-content">
+                <div class="auth-brand-tag">JOIN THE FLEET</div>
+                <h2 class="auth-left-heading">Elevate<br>Your<br><span>Journey.</span></h2>
+                <p class="auth-left-sub">Register to unlock access to our curated collection of premium vehicles worldwide.</p>
+                <div class="auth-feature-list">
+                    <div class="auth-feature"><span class="auth-feature-dot"></span> Curated premium fleet</div>
+                    <div class="auth-feature"><span class="auth-feature-dot"></span> Instant booking confirmation</div>
+                    <div class="auth-feature"><span class="auth-feature-dot"></span> 24/7 concierge support</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="auth-right">
+        <div class="auth-right-inner">
+
+            <!-- Top bar -->
+            <div class="auth-topbar">
+                <div class="auth-logo d-flex align-items-center">
+                    <svg class="me-2" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L4 5V11C4 16.1 7.4 20.8 12 22C16.6 20.8 20 16.1 20 11V5L12 2Z" fill="#6082B6"/>
+                        <path d="M9 12L11 14L15 10" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    TRUST<span>DRIVE</span>
+                </div>
+                <p class="auth-switch-text">Already a member? <a href="{% url 'login' %}">Sign in &rarr;</a></p>
+            </div>
+
+            <!-- Form Header -->
+            <div class="auth-form-header">
+                <h1 class="auth-form-title">Create Account</h1>
+                <p class="auth-form-sub">Join our exclusive network of global travelers.</p>
+            </div>
+
+            <!-- Errors -->
+            {% if form.non_field_errors %}
+                <div class="auth-error-box">
+                    {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- Register Form -->
+            <form method="post" id="registerForm" novalidate class="auth-form">
+                {% csrf_token %}
+
+                <div class="auth-fields-grid">
+                    {% for field in form %}
+                    <div class="auth-field {% if field.name == 'username' or field.name == 'email' %}full-width{% endif %}">
+                        <label class="auth-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="auth-field-error">{% for error in field.errors %}{{ error }}{% endfor %}</div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Terms -->
+                <div class="auth-terms">
+                    <label class="auth-checkbox-label">
+                        <input type="checkbox" id="termsCheck" required checked>
+                        I agree to the <a href="#">Terms &amp; Conditions</a>
+                    </label>
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" class="auth-btn-primary">Create My Account</button>
+
+
+            </form>
+
+            <p class="auth-footer-note">© 2026 TrustDrive Fleet Management. All rights reserved.</p>
+        </div>
+    </div>
+</div>
+
+<style>
+/* ===== AUTH WRAPPER (Full Viewport Flexbox) ===== */
+.auth-wrapper {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+    background: #ffffff;
+}
+
+/* ===== LEFT PANEL ===== */
+.auth-left {
+    flex: 0 0 38%;
+    position: relative;
+    background: #0a1f2e;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+}
+
+.auth-left-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.auth-car-image {
+    position: absolute;
+    bottom: 32%;
+    left: 50%;
+    transform: translateX(-55%);
+    width: 140%;
+    max-width: none;
+    filter: drop-shadow(0 30px 60px rgba(0,0,0,0.5));
+    animation: floatCar 6s ease-in-out infinite;
+    z-index: 2;
+}
+
+@keyframes floatCar {
+    0%, 100% { transform: translateX(-55%) translateY(0); }
+    50%       { transform: translateX(-55%) translateY(-12px); }
+}
+
+.auth-left-content {
+    position: relative;
+    z-index: 3;
+    padding: 2.5rem 2.75rem;
+    background: linear-gradient(to top, rgba(10,31,46,1) 0%, rgba(10,31,46,0.75) 65%, transparent 100%);
+}
+
+.auth-brand-tag {
+    display: inline-block;
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 0.35rem 1rem;
+    border-radius: 6px;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    margin-bottom: 1.25rem;
+}
+
+.auth-left-heading {
+    font-size: 2.6rem;
+    font-weight: 900;
+    color: #ffffff;
+    line-height: 1.15;
+    letter-spacing: -1.5px;
+    margin-bottom: 0.9rem;
+}
+
+.auth-left-heading span {
+    color: #3b82f6;
+}
+
+.auth-left-sub {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.7;
+    margin-bottom: 1.75rem;
+    max-width: 280px;
+}
+
+.auth-feature-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.auth-feature {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.65);
+    font-weight: 500;
+}
+
+.auth-feature-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #3b82f6;
+    flex-shrink: 0;
+}
+
+/* ===== RIGHT PANEL ===== */
+.auth-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    padding: 2rem 2.5rem;
+    overflow-y: auto;
+}
+
+.auth-right-inner {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    animation: slideUp 0.7s cubic-bezier(0.165, 0.84, 0.44, 1) both;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Top bar */
+.auth-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2.25rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.auth-logo {
+    font-size: 1.3rem;
+    font-weight: 900;
+    letter-spacing: -1px;
+    color: #0f172a;
+}
+
+.auth-logo span { color: #3b82f6; }
+
+.auth-switch-text {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin: 0;
+}
+
+.auth-switch-text a {
+    color: #3b82f6;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.auth-switch-text a:hover { color: #0f172a; }
+
+/* Form Header */
+.auth-form-header { margin-bottom: 1.75rem; }
+
+.auth-form-title {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #0f172a;
+    letter-spacing: -1.5px;
+    margin-bottom: 0.35rem;
+}
+
+.auth-form-sub {
+    font-size: 0.87rem;
+    color: #94a3b8;
+    margin: 0;
+}
+
+/* Error box */
+.auth-error-box {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #991b1b;
+    font-size: 0.82rem;
+    padding: 0.85rem 1.1rem;
+    border-radius: 10px;
+    margin-bottom: 1.25rem;
+}
+
+/* Auth Form */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* 2-column grid for form fields */
+.auth-fields-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.auth-field {
+    flex: 1 1 calc(50% - 0.4rem);
+    min-width: 180px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.auth-field.full-width {
+    flex: 1 1 100%;
+}
+
+.auth-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.auth-field input,
+.auth-field select,
+.auth-field textarea {
+    width: 100%;
+    padding: 0.65rem 0.9rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    color: #0f172a;
+    background: #ffffff;
+    transition: all 0.2s ease;
+    outline: none;
+    font-family: 'Inter', sans-serif;
+}
+
+.auth-field input:focus,
+.auth-field select:focus,
+.auth-field textarea:focus {
+    border-color: #3b82f6;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.08);
+}
+
+.auth-field-error {
+    font-size: 0.73rem;
+    color: #dc2626;
+    font-weight: 600;
+}
+
+/* Terms */
+.auth-terms { margin-top: 0.25rem; }
+
+.auth-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.82rem;
+    color: #64748b;
+    cursor: pointer;
+}
+
+.auth-checkbox-label input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    accent-color: #3b82f6;
+    flex-shrink: 0;
+}
+
+.auth-checkbox-label a {
+    color: #3b82f6;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+/* Primary Button */
+.auth-btn-primary {
+    width: 100%;
+    padding: 1rem;
+    background: #0f172a;
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.2);
+}
+
+.auth-btn-primary:hover {
+    background: #000000;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.3);
+}
+
+.auth-btn-primary:active { transform: scale(0.97); }
+
+/* Divider */
+.auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #f1f5f9;
+}
+
+.auth-divider span {
+    font-size: 0.72rem;
+    color: #94a3b8;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    white-space: nowrap;
+}
+
+/* Social Button */
+.auth-btn-social {
+    width: 100%;
+    padding: 0.9rem;
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #0f172a;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    transition: all 0.25s ease;
+}
+
+.auth-btn-social:hover {
+    border-color: #0f172a;
+    background: #f8fafc;
+}
+
+/* Footer note */
+.auth-footer-note {
+    font-size: 0.7rem;
+    color: #cbd5e1;
+    text-align: center;
+    margin-top: 1.75rem;
+    margin-bottom: 0;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .auth-left { display: none; }
+}
+
+@media (max-width: 768px) {
+    .auth-wrapper { flex-direction: column; }
+    .auth-right { padding: 2rem 1.25rem; }
+    .auth-right-inner { max-width: 100%; }
+    .auth-field { flex: 1 1 100%; }
+}
+</style>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container pt-5">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <h2 class="fw-bold mb-0">{% if user.role == 'admin' or user.role == 'staff' %}All Bookings{% else %}My Bookings{% endif %}</h2>
+        </div>
+
+        <div class="p-0 overflow-hidden bg-white shadow-sm border border-light rounded-4">
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead style="background-color: #f8f9fa;">
+                        <tr class="text-muted extra-small fw-bold ls-1 uppercase">
+                            <th class="border-0 px-4 py-3">Booking ID</th>
+                            <th class="border-0 py-3">Car</th>
+                            {% if user.role != 'customer' %}<th class="border-0 py-3">Customer</th>{% endif %}
+                            <th class="border-0 py-3">Rental Dates</th>
+                            <th class="border-0 py-3">Total Price</th>
+                            <th class="border-0 py-3">Status</th>
+                            <th class="border-0 text-end pe-4 py-3">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for booking in bookings %}
+                        <tr>
+                            <td class="ps-4 py-3 fw-bold text-dark-blue">#{{ booking.id }}</td>
+                            <td class="py-3">{{ booking.car.brand }} {{ booking.car.name }}</td>
+                            {% if user.role != 'customer' %}<td class="py-3">{{ booking.user.username }}</td>{% endif %}
+                            <td class="py-3 small text-muted">{{ booking.start_date }} to {{ booking.end_date }}</td>
+                            <td class="py-3 fw-bold">₹{{ booking.total_price }}</td>
+                            <td class="py-3">
+                                {% if booking.status == 'pending' %}
+                                    <span class="badge rounded-pill px-3 py-2 fw-bold" style="background: #f97316; color: white; font-size: 0.65rem;">PENDING</span>
+                                {% elif booking.status == 'confirmed' %}
+                                    <span class="badge rounded-pill px-3 py-2 fw-bold" style="background: #0ea5e9; color: white; font-size: 0.65rem;">CONFIRMED</span>
+                                {% elif booking.status == 'active' %}
+                                    <span class="badge rounded-pill px-3 py-2 fw-bold" style="background: #3b82f6; color: white; font-size: 0.65rem;">ACTIVE</span>
+                                {% elif booking.status == 'completed' %}
+                                    <span class="badge rounded-pill px-3 py-2 fw-bold" style="background: #10b981; color: white; font-size: 0.65rem;">COMPLETED</span>
+                                {% else %}
+                                    <span class="badge rounded-pill px-3 py-2 fw-bold text-uppercase" style="background: #64748b; color: white; font-size: 0.65rem;">{{ booking.status }}</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-end pe-4 py-3">
+                                {% if user.role == 'admin' or user.role == 'staff' %}
+                                    {% if booking.status == 'pending' %}
+                                        <a href="{% url 'booking_status_update' booking.id %}" class="btn btn-sm btn-outline-accent">Manage</a>
+                                    {% else %}
+                                        <span class="text-muted small">Updated</span>
+                                    {% endif %}
+                                {% else %}
+                                    <a href="{% url 'car_detail' booking.car.id %}" class="btn btn-sm btn-outline-dark-blue px-3 py-2">View Car</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center py-5 text-muted">No bookings found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .text-dark-blue { color: #1D546D !important; }
+    .btn-outline-dark-blue {
+        border-color: #1D546D;
+        color: #1D546D;
+    }
+    .btn-outline-dark-blue:hover {
+        background-color: #1D546D;
+        color: white;
+    }
+    .text-accent { color: var(--accent-color); }
+    .btn-outline-accent {
+        border-color: var(--accent-color);
+        color: var(--accent-color);
+    }
+    .btn-outline-accent:hover {
+        background-color: var(--accent-color);
+        color: white;
+    }
+    .ls-1 { letter-spacing: 1.5px; }
+    .extra-small { font-size: 0.65rem; }
+    .table thead th { border-bottom: 2px solid var(--border-light) !important; }
+</style>
+{% endblock %}

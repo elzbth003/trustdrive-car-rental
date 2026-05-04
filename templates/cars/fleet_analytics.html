@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container pt-5">
+        <div class="d-flex justify-content-between align-items-end mb-5">
+            <div>
+                <h1 class="fw-bold display-5 mb-2 text-primary">Fleet Analytics</h1>
+                <p class="text-muted small ls-1 text-uppercase">Tracking popularity and engagement across your fleet</p>
+            </div>
+            <a href="{% url 'car_list_admin' %}" class="btn btn-outline-primary px-4">Manage Fleet</a>
+        </div>
+
+        <div class="glass-panel p-0 overflow-hidden shadow-lg border border-light">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="ps-4 py-3 small uppercase ls-1 text-muted">Vehicle</th>
+                            <th class="py-3 small uppercase ls-1 text-muted text-center">Trips</th>
+                            <th class="py-3 small uppercase ls-1 text-muted text-center">Favorites</th>
+                            <th class="py-3 small uppercase ls-1 text-muted text-center">Reviews</th>
+                            <th class="py-3 small uppercase ls-1 text-muted text-center">Avg Rating</th>
+                            <th class="pe-4 py-3 small uppercase ls-1 text-muted text-end">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for car in cars %}
+                        <tr>
+                            <td class="ps-4 py-3">
+                                <div class="d-flex align-items-center gap-3">
+                                    {% if car.image %}
+                                        <img src="{{ car.image.url }}" class="rounded-1 object-fit-cover" style="width: 60px; height: 40px;" alt="">
+                                    {% endif %}
+                                    <div>
+                                        <div class="fw-bold text-primary">{{ car.brand }} {{ car.name }}</div>
+                                        <small class="text-muted">{{ car.registration_plate }}</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-center fw-bold text-dark">{{ car.trips_count }}</td>
+                            <td class="text-center">
+                                <span class="badge bg-soft-accent text-accent px-3 py-2 rounded-pill">
+                                    <i class="bi bi-heart-fill me-1"></i> {{ car.fav_count }}
+                                </span>
+                            </td>
+                            <td class="text-center fw-bold text-muted">{{ car.rev_count }}</td>
+                            <td class="text-center">
+                                <div class="d-flex align-items-center justify-content-center gap-1 text-warning">
+                                    <span class="fw-bold">{{ car.average_rating|floatformat:1 }}</span>
+                                    <i class="bi bi-star-fill small"></i>
+                                </div>
+                            </td>
+                            <td class="pe-4 text-end">
+                                <a href="{% url 'car_detail' car.id %}" class="btn btn-sm btn-outline-light text-dark border-light shadow-sm">View Details</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center py-5 text-muted">No analytics data available yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

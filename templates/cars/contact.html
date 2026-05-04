@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="hero-section text-center position-relative overflow-hidden pt-4 pb-4">
+    <div class="watermark" style="top: 10%; left: -5%;">CONTACT</div>
+    <div class="container py-3">
+        <h1 class="hero-text">Get in <span class="text-accent">Touch</span></h1>
+        <p class="text-muted lead mx-auto" style="max-width: 600px;">
+            Our team is available around the clock to assist you with your mobility needs. We look forward to hearing from you.
+        </p>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row g-5">
+            <!-- Contact Info -->
+            <div class="col-lg-4">
+                <div class="p-4 bg-white border border-light h-100 shadow-sm">
+                    <h4 class="fw-bold mb-4">MAPPING OUR HUB</h4>
+                    <div class="accent-bar"></div>
+                    
+                    <div class="mb-5 mt-4">
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="p-3 bg-light rounded-circle me-3">
+                                <i class="bi bi-geo-alt text-accent fs-4"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0">LOCATION</h6>
+                                <p class="small text-muted mb-0">11 Elegant Plaza, Mayfair, London</p>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="p-3 bg-light rounded-circle me-3">
+                                <i class="bi bi-telephone text-accent fs-4"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0">PHONE</h6>
+                                <p class="small text-muted mb-0">+1 (800) TRUST-HUB</p>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center mb-0">
+                            <div class="p-3 bg-light rounded-circle me-3">
+                                <i class="bi bi-envelope text-accent fs-4"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-0">EMAIL</h6>
+                                <p class="small text-muted mb-0">hello@trustdrive.com</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-light border-start border-accent border-4">
+                        <p class="small text-muted mb-0">
+                            <strong>Working Hours:</strong><br>
+                            Mon - Fri: 08:00 AM - 10:00 PM<br>
+                            Sat - Sun: 09:00 AM - 08:00 PM
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="col-lg-8">
+                <div class="p-5 bg-white border border-light shadow-sm">
+                    <h4 class="fw-bold mb-4">INQUIRY FORM</h4>
+                    <form>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="small fw-bold text-muted mb-2">FULL NAME</label>
+                                <input type="text" class="form-control" placeholder="Enter your name">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="small fw-bold text-muted mb-2">EMAIL ADDRESS</label>
+                                <input type="email" class="form-control" placeholder="Enter your email">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="small fw-bold text-muted mb-2">SUBJECT</label>
+                                <select class="form-select py-3 rounded-0 bg-light border-0">
+                                    <option>General Inquiry</option>
+                                    <option>Corporate Partnership</option>
+                                    <option>Fleet Support</option>
+                                    <option>Feedback</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="small fw-bold text-muted mb-2">MESSAGE</label>
+                                <textarea class="form-control" rows="5" placeholder="How can we assist you?"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary px-5 py-3">SEND MESSAGE</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .form-control, .form-select {
+        border-radius: 0;
+        background: var(--bg-soft);
+        border: none;
+        padding: 1.2rem;
+    }
+    .form-control:focus, .form-select:focus {
+        background: white;
+        box-shadow: 0 0 0 2px var(--accent-color);
+        color: var(--text-main);
+    }
+</style>
+{% endblock %}

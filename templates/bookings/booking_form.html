@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container pt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="glass-panel">
+                    <h2 class="fw-bold mb-4">Complete Your Booking</h2>
+                    <p class="text-muted mb-4">Select the dates you'd like to rent the vehicle.</p>
+                    
+                    <form method="post" id="bookingForm">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">Start Date</label>
+                            {{ form.start_date }}
+                            {% if form.start_date.errors %}
+                                <div class="text-danger small mt-1">{{ form.start_date.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label text-muted small">End Date</label>
+                            {{ form.end_date }}
+                            {% if form.end_date.errors %}
+                                <div class="text-danger small mt-1">{{ form.end_date.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger bg-opacity-10 py-2">
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+
+                        <div id="costCalculation" class="bg-secondary bg-opacity-10 p-4 rounded mb-4 d-none">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Price per day</span>
+                                <span id="dailyPrice" data-price="{{ car.price_per_day }}">${{ car.price_per_day }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Duration</span>
+                                <span id="daysCount">0 days</span>
+                            </div>
+                            <hr class="border-secondary opacity-25">
+                            <div class="d-flex justify-content-between fw-bold h5 mb-0">
+                                <span>Total Cost</span>
+                                <span id="totalPrice">$0</span>
+                            </div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">Proceed to Payment</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% block extra_js %}
+<script>
+    const startInput = document.querySelector('input[name="start_date"]');
+    const endInput = document.querySelector('input[name="end_date"]');
+    const costDiv = document.getElementById('costCalculation');
+    const daysSpan = document.getElementById('daysCount');
+    const totalSpan = document.getElementById('totalPrice');
+    const dailyPrice = parseFloat(document.getElementById('dailyPrice').dataset.price);
+
+    function calculateCost() {
+        if (startInput.value && endInput.value) {
+            const start = new Date(startInput.value);
+            const end = new Date(endInput.value);
+            const diffTime = Math.abs(end - start);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            if (diffDays > 0 && end > start) {
+                costDiv.classList.remove('d-none');
+                daysSpan.innerText = `${diffDays} days`;
+                totalSpan.innerText = `$${(diffDays * dailyPrice).toFixed(2)}`;
+            } else {
+                costDiv.classList.add('d-none');
+            }
+        }
+    }
+
+    startInput.addEventListener('change', calculateCost);
+    endInput.addEventListener('change', calculateCost);
+</script>
+{% endblock %}
+{% endblock %}

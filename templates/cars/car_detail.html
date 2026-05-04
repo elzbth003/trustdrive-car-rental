@@ -1,0 +1,279 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Immersive Header Section -->
+<section class="bg-white border-bottom border-light pt-4 pb-2">
+    <div class="container-fluid px-lg-5">
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb mb-0 extra-small uppercase ls-2">
+                <li class="breadcrumb-item"><a href="{% url 'car_list' %}" class="text-decoration-none text-muted">Fleet</a></li>
+                <li class="breadcrumb-item active text-dark" aria-current="page">{{ car.brand }} {{ car.name }}</li>
+            </ol>
+        </nav>
+
+        <div class="row align-items-end g-4">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-black text-dark-blue mb-2 ls-neg-2 text-uppercase">{{ car.brand }} {{ car.name }} <span class="text-accent fw-normal ms-2">{{ car.year }}</span></h1>
+                <div class="d-flex align-items-center flex-wrap gap-4">
+                    <div class="d-flex align-items-center gap-1">
+                        <div class="text-accent">
+                            {% for i in "12345" %}
+                                <i class="bi bi-star{% if forloop.counter > car.average_rating %}{% else %}-fill{% endif %}"></i>
+                            {% endfor %}
+                        </div>
+                        <span class="fw-bold text-dark-blue ms-1">{{ car.average_rating|floatformat:1 }}</span>
+                    </div>
+                    <span class="text-muted small ls-1 uppercase fw-bold border-start ps-4 border-light">{{ car.trips_count }} JOURNEYS COMPLETED</span>
+                    <span class="badge bg-light text-accent rounded-pill px-3 py-2 extra-small ls-1 uppercase fw-bold">Verified Elite Vehicle</span>
+                </div>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <div class="d-flex gap-2 justify-content-lg-end">
+                    <button class="btn btn-outline-light text-dark-blue border-light shadow-sm rounded-0 px-4 py-2 small fw-bold">
+                        <i class="bi bi-share me-2"></i>SHARE
+                    </button>
+                    {% if user.is_authenticated and user.role == 'customer' %}
+                    <a href="{% url 'toggle_favorite' car.id %}" class="btn {% if car.id in user_favorites %}btn-accent{% else %}btn-outline-light text-dark-blue{% endif %} border-light shadow-sm rounded-0 px-4 py-2 small fw-bold">
+                        <i class="bi bi-heart{% if car.id in user_favorites %}-fill{% endif %} me-2"></i>FAVORITE
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Immersive Gallery & Content Section -->
+<section class="py-5 bg-light-soft">
+    <div class="container-fluid px-lg-5">
+        <div class="row g-5">
+            <!-- Left: Gallery & Details -->
+            <div class="col-xl-8">
+                <!-- Immersive Gallery -->
+                <div class="mb-5">
+                    <div id="carGallery" class="carousel slide rounded-0 overflow-hidden shadow-2xl bg-white" data-bs-ride="carousel">
+                        <div class="carousel-inner" style="height: 600px;">
+                            <div class="carousel-item active h-100">
+                                {% if car.image %}
+                                    <img src="{{ car.image.url }}" class="d-block w-100 h-100 object-fit-cover" alt="Exterior View">
+                                {% else %}
+                                    <div class="h-100 d-flex align-items-center justify-content-center bg-light opacity-50">
+                                        <i class="bi bi-image display-1"></i>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            {% if car.interior_image_1 %}
+                            <div class="carousel-item h-100">
+                                <img src="{{ car.interior_image_1.url }}" class="d-block w-100 h-100 object-fit-cover" alt="Interior View 1">
+                            </div>
+                            {% endif %}
+                            {% if car.interior_image_2 %}
+                            <div class="carousel-item h-100">
+                                <img src="{{ car.interior_image_2.url }}" class="d-block w-100 h-100 object-fit-cover" alt="Interior View 2">
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carGallery" data-bs-slide="prev" style="width: 5%;">
+                            <i class="bi bi-chevron-left fs-3 text-white opacity-75 hover-opacity-100"></i>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carGallery" data-bs-slide="next" style="width: 5%;">
+                            <i class="bi bi-chevron-right fs-3 text-white opacity-75 hover-opacity-100"></i>
+                        </button>
+
+                        <!-- Clean Progress Indicators -->
+                        <div class="carousel-indicators mb-4">
+                            <button type="button" data-bs-target="#carGallery" data-bs-slide-to="0" class="active m-1 rounded-0" style="width: 30px; height: 3px;"></button>
+                            {% if car.interior_image_1 %}<button type="button" data-bs-target="#carGallery" data-bs-slide-to="1" class="m-1 rounded-0" style="width: 30px; height: 3px;"></button>{% endif %}
+                            {% if car.interior_image_2 %}<button type="button" data-bs-target="#carGallery" data-bs-slide-to="2" class="m-1 rounded-0" style="width: 30px; height: 3px;"></button>{% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Technical Specs Strip -->
+                <div class="p-4 bg-white shadow-sm border border-light-soft rounded-0 mb-5">
+                    <div class="row g-4 text-center">
+                        <div class="col-3 border-end border-light-soft">
+                            <i class="bi bi-gear-wide-connected text-accent fs-4 d-block mb-2"></i>
+                            <span class="extra-small fw-bold text-muted uppercase ls-1">Transmission</span>
+                            <h6 class="fw-bold text-dark-blue mb-0 mt-1 uppercase">{{ car.get_transmission_display }}</h6>
+                        </div>
+                        <div class="col-3 border-end border-light-soft">
+                            <i class="bi bi-people text-accent fs-4 d-block mb-2"></i>
+                            <span class="extra-small fw-bold text-muted uppercase ls-1">Seating</span>
+                            <h6 class="fw-bold text-dark-blue mb-0 mt-1 uppercase">{{ car.seating_capacity }} ADULTS</h6>
+                        </div>
+                        <div class="col-3 border-end border-light-soft">
+                            <i class="bi bi-fuel-pump text-accent fs-4 d-block mb-2"></i>
+                            <span class="extra-small fw-bold text-muted uppercase ls-1">Fuel Type</span>
+                            <h6 class="fw-bold text-dark-blue mb-0 mt-1 uppercase">{{ car.get_fuel_type_display }}</h6>
+                        </div>
+                        <div class="col-3">
+                            <i class="bi bi-speedometer2 text-accent fs-4 d-block mb-2"></i>
+                            <span class="extra-small fw-bold text-muted uppercase ls-1">Architecture</span>
+                            <h6 class="fw-bold text-dark-blue mb-0 mt-1 uppercase">{{ car.get_car_type_display }}</h6>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Narrative -->
+                <div class="mb-5">
+                    <h4 class="fw-bold text-dark-blue mb-4 ls-neg-1">THE DRIVE</h4>
+                    <div class="text-muted lead-small opacity-75" style="line-height: 1.8;">
+                        {{ car.description|linebreaks }}
+                    </div>
+                </div>
+
+                <!-- Reviews Section -->
+                <div class="mt-5 pt-5 border-top border-light-soft">
+                    <div class="d-flex justify-content-between align-items-center mb-5">
+                        <h4 class="fw-bold text-dark-blue mb-0 ls-neg-1">GUEST EXPERIENCES</h4>
+                        <div class="text-accent fw-bold small uppercase ls-1">
+                            {{ car.reviews.count }} VERIFIED REVIEWS
+                        </div>
+                    </div>
+                    
+                    <div class="row g-4">
+                        {% for review in car.reviews.all %}
+                        <div class="col-md-6">
+                            <div class="p-4 bg-white rounded-0 border border-light-soft h-100 shadow-hover transition-all-300">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="rounded-circle bg-light-soft text-accent d-flex align-items-center justify-content-center fw-bold" style="width: 45px; height: 45px;">
+                                            {{ review.user.username|first|upper }}
+                                        </div>
+                                        <div>
+                                            <h6 class="fw-bold text-dark-blue mb-0">{{ review.user.username }}</h6>
+                                            <span class="extra-small text-muted uppercase ls-1">{{ review.created_at|date:"F Y" }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="text-accent small">
+                                        {% for i in "12345" %}
+                                            <i class="bi bi-star{% if forloop.counter > review.rating %}{% else %}-fill{% endif %}"></i>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <p class="text-muted small mb-0">{{ review.comment }}</p>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="col-12">
+                            <p class="text-muted py-4 bg-white text-center rounded-4 border border-dashed border-light-soft">No guest experiences shared yet for this vehicle.</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Booking Card (Sticky) -->
+            <div class="col-xl-4">
+                <div class="sticky-top" style="top: 110px; z-index: 10;">
+                    <div class="bg-white rounded-0 shadow-2xl border border-light-soft overflow-hidden p-5 reveal reveal-right">
+                        <div class="d-flex justify-content-between align-items-start mb-5 pb-4 border-bottom border-light-soft">
+                            <div>
+                                <h2 class="fw-black text-dark-blue mb-0 ls-neg-1">₹{{ car.daily_rate|floatformat:0 }} <small class="text-muted fw-normal h6 ls-0">/ day</small></h2>
+                            </div>
+                            <div class="badge bg-light-soft text-accent p-2 px-3 rounded-0">
+                                <i class="bi bi-shield-check me-2"></i> All-Inclusive
+                            </div>
+                        </div>
+
+                        <!-- Amenities list -->
+                        <div class="mb-5 stagger-children">
+                            <div class="d-flex align-items-center gap-3 mb-4">
+                                <div class="p-3 bg-light-soft rounded-circle text-accent">
+                                    <i class="bi bi-check2-circle fs-5"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold text-dark-blue mb-0 extra-small uppercase ls-1">Premium Insurance</h6>
+                                    <p class="text-muted extra-small mb-0">Fully covered with roadside assistance.</p>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-3 mb-4">
+                                <div class="p-3 bg-light-soft rounded-circle text-accent">
+                                    <i class="bi bi-geo-alt fs-5"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold text-dark-blue mb-0 extra-small uppercase ls-1">Free Concierge Delivery</h6>
+                                    <p class="text-muted extra-small mb-0">Vehicle brought directly to your location.</p>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="p-3 bg-light-soft rounded-circle text-accent">
+                                    <i class="bi bi-lightning-charge fs-5"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold text-dark-blue mb-0 extra-small uppercase ls-1">Instant Confirmation</h6>
+                                    <p class="text-muted extra-small mb-0">No waiting. Reserve your spot immediately.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if car.status == 'available' %}
+                            <div class="d-grid gap-3">
+                                {% if user.is_authenticated %}
+                                    {% if user.role == 'customer' %}
+                                        <a href="{% url 'booking_create' car.id %}" class="btn btn-dark-blue btn-lg py-3 fw-bold ls-2 rounded-0 shadow-lg transform-hover-up">
+                                            SECURE THIS VEHICLE
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'car_edit' car.id %}" class="btn btn-outline-dark-blue btn-lg py-3 fw-medium ls-3 rounded-0 uppercase small">
+                                            ADMIN / MODIFY DATA
+                                        </a>
+                                    {% endif %}
+                                {% else %}
+                                    <a href="{% url 'login' %}" class="btn btn-dark-blue btn-lg py-3 fw-bold ls-2 rounded-0 shadow-lg">
+                                        LOGIN TO RESERVE
+                                    </a>
+                                {% endif %}
+                                <div class="text-center mt-3">
+                                    <p class="extra-small text-muted mb-0">Cancellation is free up to 24h before journey.</p>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="p-5 bg-light-soft rounded-4 text-center">
+                                <i class="bi bi-calendar-x display-4 text-muted mb-3 d-block"></i>
+                                <h6 class="fw-bold text-dark-blue mb-2">VEHICLE CURRENTLY RENTED</h6>
+                                <p class="extra-small text-muted mb-0">Check back later or browse other elite options in our fleet.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .bg-light-soft { background-color: #f8fafc; }
+    .border-light-soft { border-color: #f1f5f9 !important; }
+    .text-dark-blue { color: #0f172a; }
+    .btn-dark-blue { background-color: #0f172a; color: white; border: none; }
+    .btn-dark-blue:hover { background-color: #000; color: white; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+    .btn-outline-dark-blue { border: 2px solid #0f172a; color: #0f172a; background: transparent; }
+    .btn-outline-dark-blue:hover { background: #0f172a; color: white; }
+    .fw-black { font-weight: 900; }
+    .ls-neg-1 { letter-spacing: -1px; }
+    .ls-neg-2 { letter-spacing: -2px; }
+    .ls-0 { letter-spacing: 0; }
+    .ls-1 { letter-spacing: 1px; }
+    .ls-2 { letter-spacing: 2px; }
+    .extra-small { font-size: 0.68rem; }
+    .lead-small { font-size: 1.1rem; }
+    .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08); }
+    .shadow-hover:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.05) !important; }
+    .transition-all-300 { transition: all 0.3s ease; }
+    .transform-hover-up:hover { transform: translateY(-3px); }
+    .object-fit-cover { object-fit: cover; }
+
+    /* High-Quality Image Rendering */
+    img {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+        backface-visibility: hidden;
+        transform: translateZ(0);
+        -webkit-font-smoothing: antialiased;
+        filter: contrast(1.01) saturate(1.02); /* Subtle pop for quality feel */
+    }
+</style>
+{% endblock %}

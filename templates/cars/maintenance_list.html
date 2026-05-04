@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="d-flex justify-content-between align-items-end mb-5 reveal reveal-down">
+        <div>
+            <h1 class="fw-bold text-primary mb-2">MAINTENANCE LOGS</h1>
+            <p class="text-muted ls-1 uppercase small">Complete Fleet Service History</p>
+        </div>
+        <a href="{% url 'maintenance_create' %}" class="btn btn-primary px-4 py-2 fw-bold shadow-sm rounded-3">
+            <i class="bi bi-plus-lg me-2"></i>NEW LOG
+        </a>
+    </div>
+
+    <div class="glass-panel rounded-4 border border-light shadow-lg overflow-hidden reveal reveal-up">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light border-bottom border-light">
+                    <tr>
+                        <th class="ps-4 py-3 extra-small fw-bold text-muted uppercase ls-1">Date</th>
+                        <th class="py-3 extra-small fw-bold text-muted uppercase ls-1">Vehicle</th>
+                        <th class="py-3 extra-small fw-bold text-muted uppercase ls-1">Type</th>
+                        <th class="py-3 extra-small fw-bold text-muted uppercase ls-1">Mileage</th>
+                        <th class="py-3 extra-small fw-bold text-muted uppercase ls-1">Cost</th>
+                        <th class="pe-4 py-3 extra-small fw-bold text-muted uppercase ls-1 text-end">Performed By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in logs %}
+                    <tr class="border-bottom border-light">
+                        <td class="ps-4 py-4">
+                            <span class="fw-bold text-dark small">{{ log.date }}</span>
+                        </td>
+                        <td>
+                            <div class="fw-bold small text-primary">{{ log.car.brand }} {{ log.car.name }}</div>
+                            <div class="extra-small text-muted">{{ log.car.registration_plate }}</div>
+                        </td>
+                        <td>
+                            {% if log.log_type == 'service' %}
+                                <span class="badge rounded-pill px-3 py-1 fw-bold" style="background: #0ea5e9; color: white; font-size: 0.6rem;">SERVICE</span>
+                            {% elif log.log_type == 'repair' %}
+                                <span class="badge rounded-pill px-3 py-1 fw-bold" style="background: #f59e0b; color: white; font-size: 0.6rem;">REPAIR</span>
+                            {% elif log.log_type == 'damage' %}
+                                <span class="badge rounded-pill px-3 py-1 fw-bold" style="background: #ef4444; color: white; font-size: 0.6rem;">DAMAGE</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="small fw-500">{{ log.mileage_at_service }} KM</span>
+                        </td>
+                        <td>
+                            <span class="small fw-bold text-primary">${{ log.cost }}</span>
+                        </td>
+                        <td class="pe-4 text-end">
+                            <span class="extra-small fw-bold text-muted uppercase ls-1">{{ log.logged_by.username }}</span>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="py-5 text-center text-muted">No maintenance records found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-soft-info { background-color: rgba(13, 202, 240, 0.1); }
+    .bg-soft-warning { background-color: rgba(255, 193, 7, 0.1); }
+    .bg-soft-danger { background-color: rgba(220, 53, 69, 0.1); }
+    .ls-1 { letter-spacing: 1px; }
+    .extra-small { font-size: 0.65rem; }
+    .fw-500 { font-weight: 500; }
+</style>
+{% endblock %}

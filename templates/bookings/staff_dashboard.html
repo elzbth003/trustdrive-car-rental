@@ -1,0 +1,226 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <!-- Dashboard Header -->
+    <div class="reveal reveal-down mb-5">
+        <h1 class="fw-bold text-primary mb-2">STAFF OPERATIONS</h1>
+        <p class="text-muted ls-1 uppercase small">Branch Management & Booking Lifecycle</p>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="row g-4 mb-5 reveal reveal-up">
+        <div class="col-md-3">
+            <div class="glass-panel p-4 rounded-4 border border-light shadow-sm text-center">
+                <h3 class="fw-bold text-accent mb-1">{{ pending_count }}</h3>
+                <span class="extra-small text-muted fw-bold uppercase ls-1">Pending Approvals</span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="glass-panel p-4 rounded-4 border border-light shadow-sm text-center">
+                <h3 class="fw-bold text-primary mb-1">{{ active_count }}</h3>
+                <span class="extra-small text-muted fw-bold uppercase ls-1">Active Rentals</span>
+            </div>
+        </div>
+        <div class="col-md-6 text-end d-flex align-items-center justify-content-end">
+            <div class="btn-group shadow-sm rounded-3 overflow-hidden border border-light">
+                <a href="?status=pending" class="btn btn-white btn-sm px-3 py-2 fw-bold text-muted border-end">PENDING</a>
+                <a href="?status=active" class="btn btn-white btn-sm px-3 py-2 fw-bold text-muted border-end">ACTIVE</a>
+                <a href="?" class="btn btn-primary btn-sm px-3 py-2 fw-bold">ALL BOOKINGS</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Maintenance Alerts -->
+    {% if overdue_cars %}
+    <div class="alert border border-danger border-opacity-25 rounded-4 p-4 mb-5 reveal reveal-up" style="background: rgba(220, 53, 69, 0.05);">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-exclamation-triangle-fill fs-2 text-danger me-4"></i>
+            <div class="flex-grow-1">
+                <h5 class="fw-bold text-danger mb-1">MAINTENANCE OVERDUE</h5>
+                <p class="mb-0 small text-muted">The following vehicles have exceeded their 5,000km service interval:</p>
+                <div class="mt-3 d-flex gap-2 flex-wrap">
+                    {% for car in overdue_cars %}
+                        <span class="badge bg-white text-danger border border-danger border-opacity-10 px-3 py-2 rounded-3 shadow-sm">
+                            <i class="bi bi-car-front me-2"></i>{{ car.brand }} {{ car.name }} ({{ car.registration_plate }})
+                        </span>
+                    {% endfor %}
+                </div>
+            </div>
+            <a href="{% url 'maintenance_create' %}" class="btn btn-danger btn-sm px-4 py-2 fw-bold shadow-sm">LOG SERVICE</a>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Bookings Table -->
+    <div class="glass-panel rounded-4 border border-light shadow-lg overflow-hidden reveal reveal-up delay-1">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light border-bottom border-light">
+                    <tr>
+                        <th class="ps-4 py-3 extra-small fw-bold text-muted uppercase ls-1">Booking ID</th>
+                        <th class="py-3 extra-small fw-bold text-muted uppercase ls-1">Customer</th>
+                        <th class="py-3 extra-small fw-bold text-muted uppercase ls-1">Vehicle</th>
+                        <th class="py-3 extra-small fw-bold text-muted uppercase ls-1">Period</th>
+                        <th class="py-3 extra-small fw-bold text-muted uppercase ls-1 text-center">Status</th>
+                        <th class="pe-4 py-3 extra-small fw-bold text-muted uppercase ls-1 text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="border-0">
+                    {% for booking in bookings %}
+                    <tr class="border-bottom border-light">
+                        <td class="ps-4 py-4">
+                            <span class="fw-bold text-primary">#{{ booking.id }}</span>
+                            <small class="d-block text-muted mt-1">{{ booking.created_at|date:"M d, H:i" }}</small>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle me-3 bg-soft text-primary fw-bold">{{ booking.user.username|slice:":1"|upper }}</div>
+                                <div>
+                                    <div class="fw-bold small">{{ booking.user.username }}</div>
+                                    <div class="extra-small text-muted">{{ booking.user.email }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="fw-bold small text-primary">{{ booking.car.brand }} {{ booking.car.name }}</div>
+                            <div class="extra-small text-muted">{{ booking.car.registration_plate }}</div>
+                        </td>
+                        <td>
+                            <div class="small fw-500">{{ booking.start_date }}</div>
+                            <div class="extra-small text-muted">to {{ booking.end_date }}</div>
+                        </td>
+                        <td class="text-center">
+                            {% if booking.status == 'pending' %}
+                                <span class="badge rounded-pill px-3 py-2 fw-bold" style="background: #f97316; color: white; font-size: 0.65rem; letter-spacing: 0.5px;">PENDING</span>
+                            {% elif booking.status == 'confirmed' %}
+                                <span class="badge rounded-pill px-3 py-2 fw-bold" style="background: #0ea5e9; color: white; font-size: 0.65rem; letter-spacing: 0.5px;">CONFIRMED</span>
+                            {% elif booking.status == 'active' %}
+                                <span class="badge rounded-pill px-3 py-2 fw-bold" style="background: #3b82f6; color: white; font-size: 0.65rem; letter-spacing: 0.5px;">ACTIVE</span>
+                            {% elif booking.status == 'completed' %}
+                                <span class="badge rounded-pill px-3 py-2 fw-bold" style="background: #10b981; color: white; font-size: 0.65rem; letter-spacing: 0.5px;">COMPLETED</span>
+                            {% elif booking.status == 'cancelled' or booking.status == 'rejected' %}
+                                <span class="badge rounded-pill px-3 py-2 fw-bold" style="background: #64748b; color: white; font-size: 0.65rem; letter-spacing: 0.5px;">CANCELLED</span>
+                            {% else %}
+                                <span class="badge bg-secondary rounded-pill px-3 py-2 fw-bold text-uppercase" style="font-size: 0.65rem; letter-spacing: 0.5px;">{{ booking.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="pe-4 text-end">
+                            <div class="dropdown">
+                                <button class="btn btn-link text-muted p-0" type="button" data-bs-toggle="dropdown">
+                                    <i class="bi bi-three-dots-vertical fs-5"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end border-light shadow-lg rounded-3 p-2">
+                                    {% if booking.status == 'pending' %}
+                                        <li>
+                                            <form action="{% url 'staff_booking_action' booking.id %}" method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="action" value="confirm">
+                                                <button type="submit" class="dropdown-item py-2 rounded-2 small fw-bold text-info"><i class="bi bi-check2-circle me-2"></i>Confirm Booking</button>
+                                            </form>
+                                        </li>
+                                    {% endif %}
+
+                                    {% if booking.status == 'confirmed' %}
+                                        <li>
+                                            <form action="{% url 'staff_booking_action' booking.id %}" method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="action" value="checkout">
+                                                <button type="submit" class="dropdown-item py-2 rounded-2 small fw-bold text-primary"><i class="bi bi-key me-2"></i>Check-out Vehicle</button>
+                                            </form>
+                                        </li>
+                                    {% endif %}
+
+                                    {% if booking.status == 'active' %}
+                                        <li>
+                                            <button type="button" class="dropdown-item py-2 rounded-2 small fw-bold text-success" data-bs-toggle="modal" data-bs-target="#returnModal{{ booking.id }}">
+                                                <i class="bi bi-arrow-return-left me-2"></i>Process Return
+                                            </button>
+                                        </li>
+                                    {% endif %}
+
+                                    {% if booking.status == 'pending' or booking.status == 'confirmed' %}
+                                        <li><hr class="dropdown-divider border-light"></li>
+                                        <li>
+                                            <form action="{% url 'staff_booking_action' booking.id %}" method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="action" value="cancel">
+                                                <button type="submit" class="dropdown-item py-2 rounded-2 small fw-bold text-danger"><i class="bi bi-x-circle me-2"></i>Cancel Booking</button>
+                                            </form>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+
+                            <!-- Return Modal -->
+                            {% if booking.status == 'active' %}
+                            <div class="modal fade" id="returnModal{{ booking.id }}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
+                                        <div class="modal-header bg-soft text-primary border-0 p-4">
+                                            <h5 class="modal-title fw-bold">Process Vehicle Return</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <form action="{% url 'staff_booking_action' booking.id %}" method="post">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="action" value="return">
+                                            <div class="modal-body p-4">
+                                                <div class="mb-4 text-center">
+                                                    <i class="bi bi-speedometer2 display-4 text-primary opacity-50 mb-3 d-block"></i>
+                                                    <p class="small text-muted">Please update the vehicle's current mileage and log any changes.</p>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="extra-small fw-bold text-muted uppercase ls-1 mb-2">Current Mileage (KM)</label>
+                                                    <input type="number" name="current_km" class="form-control form-control-lg border-0 bg-light rounded-3" value="{{ booking.car.current_km }}" required>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer border-0 p-4 pt-0">
+                                                <button type="button" class="btn btn-link text-muted fw-bold text-decoration-none" data-bs-dismiss="modal">CLOSE</button>
+                                                <button type="submit" class="btn btn-primary px-4 py-2 rounded-3 shadow-sm">COMPLETE RETURN</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="py-5 text-center">
+                            <i class="bi bi-inbox display-4 text-muted mb-3 d-block opacity-50"></i>
+                            <h5 class="text-muted fw-bold">No active bookings found</h5>
+                            <p class="small text-muted">Operations are running smooth!</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .avatar-circle {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+    }
+    .bg-soft-warning { background-color: rgba(255, 193, 7, 0.1); }
+    .bg-soft-info { background-color: rgba(13, 202, 240, 0.1); }
+    .bg-soft-primary { background-color: rgba(13, 110, 253, 0.1); }
+    .bg-soft-success { background-color: rgba(25, 135, 84, 0.1); }
+    .bg-soft-secondary { background-color: rgba(108, 117, 125, 0.1); }
+    
+    .ls-1 { letter-spacing: 1px; }
+    .extra-small { font-size: 0.65rem; }
+    .fw-500 { font-weight: 500; }
+    
+    .table-hover tbody tr:hover { background-color: rgba(13, 110, 253, 0.02); }
+    .dropdown-item:active { background-color: var(--bs-primary); }
+</style>
+{% endblock %}

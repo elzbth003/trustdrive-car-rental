@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container pt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="glass-panel">
+                    <h2 class="fw-bold mb-4">Manage Booking #{{ booking.id }}</h2>
+                    <div class="bg-secondary bg-opacity-10 p-3 rounded mb-4">
+                        <div class="small text-muted mb-1">Customer</div>
+                        <div class="fw-bold mb-3">{{ booking.user.username }}</div>
+                        <div class="small text-muted mb-1">Car</div>
+                        <div class="fw-bold mb-3">{{ booking.car.brand }} {{ booking.car.name }}</div>
+                        <div class="small text-muted mb-1">Dates</div>
+                        <div class="fw-bold">{{ booking.start_date }} to {{ booking.end_date }}</div>
+                    </div>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label class="form-label small text-muted">Update Status</label>
+                            <select name="status" class="form-select bg-dark text-white border-secondary border-opacity-25">
+                                {% for val, label in form.fields.status.choices %}
+                                    <option value="{{ val }}" {% if booking.status == val %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
+                            <a href="{% url 'booking_list' %}" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

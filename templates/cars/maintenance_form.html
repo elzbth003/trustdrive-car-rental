@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid px-lg-5 py-5 mt-4">
+    <div class="row g-5">
+        <!-- Left Column: Fleet Analytics Summary -->
+        <div class="col-lg-4 col-xl-3 d-none d-lg-block">
+            <div class="sticky-top" style="top: 100px; z-index: 100;">
+                <div class="glass-panel p-4 mb-4 border-0 shadow-sm" style="background: linear-gradient(135deg, #0a192f 0%, #1d546d 100%); border-radius: 20px;">
+                    <h6 class="text-white opacity-50 extra-small fw-bold uppercase ls-2 mb-4">Maintenance Analytics</h6>
+                    <div class="mb-4">
+                        <span class="text-white opacity-75 small d-block mb-1">Cumulative Fleet Spend</span>
+                        <h3 class="text-white fw-bold">₹{{ total_maintenance_cost|default:"0" }}</h3>
+                    </div>
+                    <div class="p-3 bg-white bg-opacity-10 rounded-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-white small">Registry Health</span>
+                            <span class="badge bg-success small">OPTIMAL</span>
+                        </div>
+                        <div class="progress" style="height: 4px; background: rgba(255,255,255,0.1);">
+                            <div class="progress-bar bg-white" style="width: 85%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-white border border-light shadow-sm" style="border-radius: 20px;">
+                    <h6 class="text-dark-blue extra-small fw-bold uppercase ls-2 mb-4">Recent Service Logs</h6>
+                    <div class="stagger-children">
+                        {% for log in recent_logs %}
+                        <div class="d-flex gap-3 mb-4 pb-3 border-bottom border-light">
+                            <div class="icon-sm bg-soft-primary rounded text-primary d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; flex-shrink: 0;">
+                                <i class="bi bi-tools"></i>
+                            </div>
+                            <div>
+                                <h6 class="small fw-bold mb-1 text-dark-blue">{{ log.car.name|upper }}</h6>
+                                <p class="extra-small text-muted mb-0">{{ log.log_type|title }} • ₹{{ log.cost }}</p>
+                                <span class="extra-small text-muted opacity-50">{{ log.date|date:"M d" }}</span>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p class="text-muted small">No recent logs found.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: The Form -->
+        <div class="col-lg-8 col-xl-9">
+            <div class="bg-white shadow-2xl overflow-hidden reveal reveal-up" style="border-radius: 24px; border: 1px solid #f1f5f9;">
+                <div class="row g-0">
+                    <div class="col-xl-4 d-none d-xl-block" style="background: url('https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&q=80&w=800') center/cover;">
+                        <div class="w-100 h-100 p-5 d-flex flex-column justify-content-end" style="background: linear-gradient(to top, rgba(10, 25, 47, 0.9), transparent);">
+                            <h4 class="text-white fw-bold mb-2">Fleet Reliability</h4>
+                            <p class="text-white opacity-75 small">Document every service to ensure the highest safety standards for our TrustDrive clients.</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-8">
+                        <div class="p-5 p-lg-5">
+                            <div class="mb-5">
+                                <h2 class="fw-bold text-dark-blue ls-1">Log Service Entry</h2>
+                                <p class="text-muted small">Enter the technical details of the vehicle maintenance below.</p>
+                            </div>
+                            
+                            <form method="post" class="stagger-children">
+                                {% csrf_token %}
+                                <div class="row g-4">
+                                    {% for field in form %}
+                                    <div class="{% if field.name == 'description' %}col-12{% else %}col-md-6{% endif %}">
+                                        <label class="extra-small fw-bold text-muted uppercase ls-2 mb-2 d-block">{{ field.label }}</label>
+                                        {{ field.errors }}
+                                        <div class="modern-input-group">
+                                            <div class="icon-wrap">
+                                                {% if field.name == 'car' %}<i class="bi bi-car-front"></i>
+                                                {% elif field.name == 'log_type' %}<i class="bi bi-tag"></i>
+                                                {% elif field.name == 'mileage_at_service' %}<i class="bi bi-speedometer2"></i>
+                                                {% elif field.name == 'cost' %}<i class="bi bi-currency-rupee"></i>
+                                                {% else %}<i class="bi bi-card-text"></i>
+                                                {% endif %}
+                                            </div>
+                                            {{ field }}
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                
+                                <div class="d-flex gap-3 mt-5">
+                                    <button type="submit" class="btn btn-primary px-5 py-3 fw-bold ls-1 shadow-lg border-0" style="background-color: #1d546d; border-radius: 12px;">
+                                        COMMIT TO REGISTRY
+                                    </button>
+                                    <a href="{% url 'maintenance_list' %}" class="btn btn-outline-light text-dark-blue border-light px-5 py-3 fw-bold ls-1" style="border-radius: 12px;">
+                                        CANCEL
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .container-fluid { max-width: 1600px; }
+    .modern-input-group {
+        display: flex;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 12px;
+        overflow: hidden;
+        align-items: stretch;
+    }
+    .modern-input-group:focus-within {
+        background: #fff;
+        border-color: #1d546d;
+        box-shadow: 0 0 0 4px rgba(29, 84, 109, 0.08);
+        transform: translateY(-1px);
+    }
+    .icon-wrap {
+        width: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #1d546d;
+        font-size: 1.1rem;
+        background: rgba(29, 84, 109, 0.03);
+        border-right: 1px solid #e2e8f0;
+        flex-shrink: 0;
+    }
+    .modern-input-group .form-control, 
+    .modern-input-group .form-select {
+        border: none !important;
+        background: transparent !important;
+        padding: 0.9rem 1.25rem !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        font-size: 0.9rem;
+        width: 100%;
+        color: #0a192f;
+        font-weight: 500;
+    }
+    .modern-input-group .form-select {
+        cursor: pointer;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%231d546d' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
+        background-repeat: no-repeat !important;
+        background-position: right 1rem center !important;
+        background-size: 16px 12px !important;
+        padding-right: 3rem !important;
+    }
+    textarea.form-control { 
+        height: 120px; 
+        resize: none;
+    }
+    .ls-2 { letter-spacing: 2px; }
+    .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08); }
+</style>
+{% endblock %}

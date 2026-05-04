@@ -1,0 +1,390 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="py-5" style="background: linear-gradient(135deg, #0a192f 0%, #1d546d 100%);">
+    <div class="container py-3">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <nav aria-label="breadcrumb" class="mb-2">
+                    <ol class="breadcrumb mb-0 extra-small uppercase ls-2">
+                        <li class="breadcrumb-item"><a href="#" class="text-white opacity-50 text-decoration-none">Admin</a></li>
+                        <li class="breadcrumb-item active text-white" aria-current="page">Dashboard</li>
+                    </ol>
+                </nav>
+                <h1 class="fw-bold mb-0 text-white display-6">Command Center</h1>
+                <p class="text-white opacity-75 mb-0 small uppercase ls-1">Welcome back, {{ user.get_full_name|default:user.username }}</p>
+            </div>
+            <div class="col-md-4 text-md-end pt-3 pt-md-0">
+                <div class="glass-panel p-3 bg-white bg-opacity-10 border-0 shadow-none">
+                    <span class="text-white opacity-50 small uppercase fw-bold ls-1 d-block mb-1">System Status</span>
+                    <div class="fw-bold text-white uppercase"><i class="bi bi-circle-fill text-success small me-2"></i> Operational</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-light-soft" style="background-color: #fcfcfc; min-height: 80vh;">
+    <div class="container">
+        {% if user.role == 'admin' %}
+            <!-- Professional Admin Overview -->
+            <div class="row g-4 mb-5" style="margin-top: -50px;">
+                <div class="col-md-3">
+                    <a href="{% url 'booking_list' %}" class="text-decoration-none block-hover">
+                        <div class="p-4 bg-white shadow-lg stats-card-blue h-100 border-0">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="p-3 bg-soft-primary rounded-circle text-primary"><i class="bi bi-wallet2 fs-5"></i></div>
+                                <span class="badge bg-soft-success text-success small fw-bold">Live</span>
+                            </div>
+                            <h6 class="text-muted small fw-bold uppercase ls-1 mb-1">Total Revenue</h6>
+                            <h3 class="fw-bold text-dark-blue">₹{{ total_revenue }}</h3>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a href="{% url 'booking_list' %}" class="text-decoration-none block-hover">
+                        <div class="p-4 bg-white shadow-lg stats-card-blue h-100 border-0">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="p-3 bg-soft-info rounded-circle text-info"><i class="bi bi-journal-text fs-5"></i></div>
+                                <span class="text-muted small">This Month</span>
+                            </div>
+                            <h6 class="text-muted small fw-bold uppercase ls-1 mb-1">Total Bookings</h6>
+                            <h3 class="fw-bold text-dark-blue">{{ total_bookings }}</h3>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a href="{% url 'fleet_analytics' %}" class="text-decoration-none block-hover">
+                        <div class="p-4 bg-white shadow-lg stats-card-blue h-100 border-0">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="p-3 bg-soft-accent rounded-circle text-accent"><i class="bi bi-star-fill fs-5"></i></div>
+                                <span class="badge bg-soft-accent text-accent small fw-bold">Trending</span>
+                            </div>
+                            <h6 class="text-muted small fw-bold uppercase ls-1 mb-1">Total Favorites</h6>
+                            <h3 class="fw-bold text-dark-blue">{{ total_favorites }}</h3>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a href="{% url 'car_list_admin' %}" class="text-decoration-none block-hover">
+                        <div class="p-4 bg-white shadow-lg stats-card-blue h-100 border-0">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="p-3 bg-soft-primary rounded-circle text-primary"><i class="bi bi-truck fs-5"></i></div>
+                                <span class="text-muted small">Inventory</span>
+                            </div>
+                            <h6 class="text-muted small fw-bold uppercase ls-1 mb-1">Active Fleet</h6>
+                            <h3 class="fw-bold text-dark-blue">{{ total_cars }}</h3>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="row g-4 mb-5">
+                <div class="col-12">
+                    <div class="p-4 glass-panel border-0 bg-white shadow-sm d-flex justify-content-between align-items-center">
+                        <div class="d-flex gap-4 align-items-center">
+                            <h6 class="fw-bold mb-0 text-primary small uppercase ls-2">Quick Actions:</h6>
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'car_add' %}" class="btn btn-sm btn-primary px-3 rounded-pill fw-bold ls-1 small">+ ADD VEHICLE</a>
+                                <a href="{% url 'maintenance_create' %}" class="btn btn-sm btn-outline-primary px-3 rounded-pill fw-bold ls-1 small">LOG SERVICE</a>
+                            </div>
+                        </div>
+                        <div class="text-muted small fw-bold uppercase ls-1">Last Log: 2 mins ago</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Charts -->
+            <div class="row g-4 mb-5">
+                <div class="col-md-6">
+                    <div class="p-4 bg-white border border-light shadow-sm h-100 rounded-3">
+                        <h6 class="text-muted small fw-bold uppercase ls-1 mb-4">Bookings by Status</h6>
+                        <div style="position: relative; height:300px; width:100%">
+                            <canvas id="statusChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-4 bg-white border border-light shadow-sm h-100 rounded-3">
+                        <h6 class="text-muted small fw-bold uppercase ls-1 mb-4">Revenue by Brand</h6>
+                        <div style="position: relative; height:300px; width:100%">
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-5">
+                <div class="col-lg-8">
+                    <div class="p-4 bg-white border border-light shadow-sm h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-5">
+                            <h5 class="fw-bold mb-0 text-dark-blue">RECENT ACTIVITY</h5>
+                            <a href="{% url 'booking_list' %}" class="btn btn-link btn-sm text-accent text-decoration-none fw-bold p-0">SYSTEM LOGS</a>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead style="background-color: #f8f9fa;">
+                                    <tr class="text-muted extra-small fw-bold ls-1 uppercase">
+                                        <th class="border-0 px-4 py-3">Vehicle</th>
+                                        <th class="border-0 py-3">Client</th>
+                                        <th class="border-0 py-3">Amount</th>
+                                        <th class="border-0 py-3 text-end px-4">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for booking in recent_bookings %}
+                                    <tr>
+                                        <td class="px-4 py-3 fw-bold text-dark-blue">{{ booking.car.name|upper }}</td>
+                                        <td class="py-3">{{ booking.user.username }}</td>
+                                        <td class="py-3">${{ booking.total_price }}</td>
+                                        <td class="py-3 text-end px-4">
+                                            {% if booking.status == 'pending' %}
+                                                <span class="badge rounded-pill px-3 py-2 fw-bold" style="background: #f97316; color: white; font-size: 0.65rem;">PENDING</span>
+                                            {% elif booking.status == 'confirmed' %}
+                                                <span class="badge rounded-pill px-3 py-2 fw-bold" style="background: #0ea5e9; color: white; font-size: 0.65rem;">CONFIRMED</span>
+                                            {% elif booking.status == 'active' %}
+                                                <span class="badge rounded-pill px-3 py-2 fw-bold" style="background: #3b82f6; color: white; font-size: 0.65rem;">ACTIVE</span>
+                                            {% elif booking.status == 'completed' %}
+                                                <span class="badge rounded-pill px-3 py-2 fw-bold" style="background: #10b981; color: white; font-size: 0.65rem;">COMPLETED</span>
+                                            {% else %}
+                                                <span class="badge rounded-pill px-3 py-2 fw-bold text-uppercase" style="background: #64748b; color: white; font-size: 0.65rem;">{{ booking.status }}</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr><td colspan="4" class="text-center py-5 text-muted">No recent activity detected.</td></tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="p-4 bg-dark-blue text-white shadow-sm h-100 rounded-3">
+                        <h5 class="fw-bold mb-4 ls-1">OPERATIONAL CONTROLS</h5>
+                        <p class="small text-white-50 mb-5">Global fleet permissions and booking overrides.</p>
+                        <div class="d-grid gap-3">
+                            <a href="{% url 'car_add' %}" class="btn btn-outline-light py-3 px-4 text-start d-flex justify-content-between align-items-center opacity-75 hover-opacity-100 transition-all">
+                                Add Vehicle <i class="bi bi-plus-lg"></i>
+                            </a>
+                            <a href="{% url 'car_list_admin' %}" class="btn btn-outline-light py-3 px-4 text-start d-flex justify-content-between align-items-center opacity-75 hover-opacity-100 transition-all">
+                                Fleet Portal <i class="bi bi-arrow-right-short fs-4"></i>
+                            </a>
+                            <a href="{% url 'staff_dashboard' %}" class="btn btn-outline-light py-3 px-4 text-start d-flex justify-content-between align-items-center opacity-75 hover-opacity-100 transition-all">
+                                Operations Hub <i class="bi bi-gear-wide-connected"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        {% elif user.role == 'staff' %}
+            <!-- Staff Hub -->
+            <div class="row g-4 mb-5">
+                <div class="col-md-6">
+                    <div class="p-4 bg-white border border-light shadow-sm text-center">
+                        <h6 class="text-muted small fw-bold uppercase ls-1 mb-2">Open Proposals</h6>
+                        <h2 class="fw-bold text-dark-blue">{{ pending_bookings }}</h2>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-4 bg-white border border-light shadow-sm text-center">
+                        <h6 class="text-muted small fw-bold uppercase ls-1 mb-2">Live Deliveries</h6>
+                        <h2 class="fw-bold text-dark-blue">{{ active_rentals }}</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-4 bg-white border border-light shadow-sm">
+                <h5 class="fw-bold mb-4 text-dark-blue">WORK QUEUE</h5>
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead style="background-color: #f8f9fa;">
+                            <tr class="text-muted extra-small fw-bold ls-1 uppercase">
+                                <th class="border-0 px-4 py-3">Inquiry ID</th>
+                                <th class="border-0 py-3">Vehicle</th>
+                                <th class="border-0 py-3">Schedule</th>
+                                <th class="border-0 py-3 text-end px-4">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for request in recent_requests %}
+                            <tr>
+                                <td class="px-4 py-3 fw-bold">#{{ request.id }}</td>
+                                <td class="py-3">{{ request.car.name|upper }}</td>
+                                <td class="py-3 small text-muted">{{ request.start_date }}</td>
+                                <td class="py-3 text-end px-4">
+                                    <a href="{% url 'booking_status_update' request.id %}" class="btn btn-outline-dark-blue btn-sm px-4">REVIEW</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="4" class="text-center py-5 text-muted">The queue is currently empty.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        {% else %}
+            <!-- Elegant Customer Profile -->
+            <div class="row g-5">
+                <div class="col-md-4">
+                    <div class="p-4 bg-white border border-light shadow-sm text-center">
+                        <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto mb-4 border border-light" style="width: 100px; height: 100px;">
+                            <i class="bi bi-person text-accent fs-1"></i>
+                        </div>
+                        <h4 class="fw-bold text-dark-blue mb-1">{{ user.username|upper }}</h4>
+                        <p class="text-muted small mb-4">{{ user.email }}</p>
+                        <div class="accent-bar mx-auto mb-4" style="width: 40px; height: 2px;"></div>
+                        <div class="text-start mb-5 small">
+                            <div class="text-muted fw-bold uppercase ls-1 mb-1">Identity</div>
+                            <p class="mb-3">MEMBER SINCE {% now "Y" %}</p>
+                            <div class="text-muted fw-bold uppercase ls-1 mb-1">Communication</div>
+                            <p>{{ user.phone_number|default:"Update contact" }}</p>
+                        </div>
+                        <button class="btn btn-dark-blue w-100 py-3">EDIT ACCOUNT</button>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="p-4 bg-white border border-light shadow-sm h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-5">
+                            <h5 class="fw-bold mb-0 text-dark-blue">RESERVATION LOGS</h5>
+                            <a href="{% url 'car_list' %}" class="btn btn-outline-dark-blue btn-sm px-4">BOOK FLEET</a>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead>
+                                    <tr class="text-muted extra-small fw-bold ls-1 uppercase">
+                                        <th class="border-0 py-3">Vehicle</th>
+                                        <th class="border-0 py-3">Period</th>
+                                        <th class="border-0 py-3">Total</th>
+                                        <th class="border-0 py-3 text-end">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for booking in my_bookings %}
+                                    <tr>
+                                        <td class="py-3 fw-bold text-dark-blue">{{ booking.car.name|upper }}</td>
+                                        <td class="py-3 small text-muted">{{ booking.start_date }}</td>
+                                        <td class="py-3">${{ booking.total_price }}</td>
+                                        <td class="py-3 text-end">
+                                            {% if booking.status == 'pending' %}
+                                                <span class="badge rounded-pill px-3 py-2 fw-bold" style="background: #f97316; color: white; font-size: 0.65rem;">PENDING</span>
+                                            {% elif booking.status == 'confirmed' %}
+                                                <span class="badge rounded-pill px-3 py-2 fw-bold" style="background: #0ea5e9; color: white; font-size: 0.65rem;">CONFIRMED</span>
+                                            {% elif booking.status == 'active' %}
+                                                <span class="badge rounded-pill px-3 py-2 fw-bold" style="background: #3b82f6; color: white; font-size: 0.65rem;">ACTIVE</span>
+                                            {% elif booking.status == 'completed' %}
+                                                <span class="badge rounded-pill px-3 py-2 fw-bold" style="background: #10b981; color: white; font-size: 0.65rem;">COMPLETED</span>
+                                            {% else %}
+                                                <span class="badge rounded-pill px-3 py-2 fw-bold text-uppercase" style="background: #64748b; color: white; font-size: 0.65rem;">{{ booking.status }}</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr><td colspan="4" class="text-center py-5 text-muted">No reservations found. <br><a href="{% url 'car_list' %}" class="text-accent text-decoration-none fw-bold">Browse our collection.</a></td></tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<style>
+    :root {
+        --dark-blue: #1D546D;
+    }
+    .text-dark-blue { color: var(--dark-blue) !important; }
+    .bg-dark-blue { background-color: var(--dark-blue) !important; }
+    .btn-dark-blue { background-color: var(--dark-blue); color: white; }
+    .btn-dark-blue:hover { background-color: #1f2937; color: white; }
+    .btn-outline-dark-blue { border: 1px solid var(--dark-blue); color: var(--dark-blue); }
+    .btn-outline-dark-blue:hover { background-color: var(--dark-blue); color: white; }
+
+    .ls-1 { letter-spacing: 1.5px; }
+    .extra-small { font-size: 0.65rem; }
+    .status-approved { border-color: #059669; color: #059669; background-color: #f0fdf4; }
+    .status-pending { border-color: #d97706; color: #d97706; background-color: #fffbeb; }
+    .status-rejected { border-color: #dc2626; color: #dc2626; background-color: #fef2f2; }
+    .table thead th { border-bottom: 2px solid var(--border-light) !important; }
+    .stats-card-blue:hover { border-color: var(--dark-blue) !important; }
+</style>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        {% if user.role == 'admin' %}
+        // Parse data from Django context
+        const statusLabels = {{ status_labels|safe|default:"[]" }};
+        const statusData = {{ status_data|safe|default:"[]" }};
+        
+        const brandLabels = {{ brand_labels|safe|default:"[]" }};
+        const brandData = {{ brand_data|safe|default:"[]" }};
+
+        // Chart 1: Bookings by Status (Doughnut)
+        const ctxStatus = document.getElementById('statusChart');
+        if (ctxStatus) {
+            new Chart(ctxStatus, {
+                type: 'doughnut',
+                data: {
+                    labels: statusLabels,
+                    datasets: [{
+                        data: statusData,
+                        backgroundColor: [
+                            '#f97316', // pending (orange)
+                            '#0ea5e9', // confirmed (blue)
+                            '#3b82f6', // active (indigo)
+                            '#10b981', // completed (green)
+                            '#ef4444'  // cancelled (red)
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    },
+                    cutout: '70%'
+                }
+            });
+        }
+
+        // Chart 2: Revenue by Brand (Bar)
+        const ctxRevenue = document.getElementById('revenueChart');
+        if (ctxRevenue) {
+            new Chart(ctxRevenue, {
+                type: 'bar',
+                data: {
+                    labels: brandLabels,
+                    datasets: [{
+                        label: 'Total Revenue ($)',
+                        data: brandData,
+                        backgroundColor: '#1D546D',
+                        borderRadius: 4,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, grid: { borderDash: [4, 4] } },
+                        x: { grid: { display: false } }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+        {% endif %}
+    });
+</script>
+{% endblock %}
