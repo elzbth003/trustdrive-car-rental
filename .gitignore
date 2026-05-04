@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Media uploads (keep structure but ignore actual files)
+media/
+
+# Static collected files
+staticfiles/
+collected_static/
+
+# Environment & secrets
+.env
+.env.*
+*.env
+
+# Virtual environments
+venv/
+env/
+.venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Migrations cache
+**/migrations/__pycache__/
+
+# Byte-compiled / optimized
+*.pyc
+*.pyo
