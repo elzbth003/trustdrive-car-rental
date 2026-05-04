@@ -61,9 +61,9 @@ class Car(models.Model):
 
     def average_rating(self):
         reviews = self.reviews.all()
-        if not reviews:
-            return 5.0  # Default for new cars
-        return sum(r.rating for r in reviews) / reviews.count()
+        if not reviews.exists():
+            return None  # No reviews yet — templates should handle this
+        return round(sum(r.rating for r in reviews) / reviews.count(), 1)
 
 class Review(models.Model):
     car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name='reviews')

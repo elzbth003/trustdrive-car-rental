@@ -1,12 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from django.db.models import Q, F
+from django.db.models import Q, F, Count
+from django.contrib import messages
 from .models import Car, MaintenanceLog, Review, Favorite
-from .forms import CarForm
+from .forms import CarForm, MaintenanceLogForm   # single consolidated import
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count
 
 class HomeView(TemplateView):
     template_name = 'cars/home.html'
@@ -107,8 +107,6 @@ class MaintenanceListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     def get_queryset(self):
         return MaintenanceLog.objects.select_related('car', 'logged_by').order_by('-date')
 
-from .forms import CarForm, MaintenanceLogForm
-
 class MaintenanceCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = MaintenanceLog
     form_class = MaintenanceLogForm
@@ -132,15 +130,22 @@ class MaintenanceCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView)
 def add_review(request, car_id):
     if request.method == 'POST':
         car = get_object_or_404(Car, id=car_id)
+        # Prevent duplicate reviews from the same user
+        if Review.objects.filter(car=car, user=request.user).exists():
+            messages.warning(request, "You have already reviewed this vehicle.")
+            return redirect('car_detail', pk=car_id)
         rating = request.POST.get('rating')
         comment = request.POST.get('comment')
-        
+        if not rating or not comment:
+            messages.error(request, "Please provide both a rating and a comment.")
+            return redirect('car_detail', pk=car_id)
         Review.objects.create(
             car=car,
             user=request.user,
-            rating=rating,
+            rating=int(rating),
             comment=comment
         )
+        messages.success(request, "Your review has been submitted.")
         return redirect('car_detail', pk=car_id)
     return redirect('car_detail', pk=car_id)
 

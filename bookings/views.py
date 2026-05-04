@@ -90,24 +90,45 @@ class StaffBookingActionView(LoginRequiredMixin, UserPassesTestMixin, UpdateView
     def post(self, request, *args, **kwargs):
         booking = self.get_object()
         action = request.POST.get('action')
-        
+
         if action == 'confirm':
             booking.status = 'confirmed'
-            messages.success(request, f"Booking {booking.id} confirmed.")
+            messages.success(request, f"Booking #{booking.id} confirmed.")
+
         elif action == 'checkout':
             booking.status = 'active'
-            messages.success(request, f"Vehicle checked out for Booking {booking.id}.")
+            # Mark car as rented so it cannot be double-booked
+            booking.car.status = 'rented'
+            booking.car.save()
+            messages.success(request, f"Vehicle checked out for Booking #{booking.id}.")
+
         elif action == 'return':
             booking.status = 'completed'
-            # Update mileage
+            # Restore car to available fleet
+            booking.car.status = 'available'
+            # Update mileage if provided
             new_km = request.POST.get('current_km')
             if new_km:
-                booking.car.current_km = int(new_km)
-                booking.car.save()
-            messages.success(request, f"Vehicle returned for Booking {booking.id}.")
+                try:
+                    booking.car.current_km = int(new_km)
+                except ValueError:
+                    pass
+            # Increment trips counter
+            booking.car.trips_count += 1
+            booking.car.save()
+            messages.success(request, f"Vehicle returned for Booking #{booking.id}. Fleet updated.")
+
         elif action == 'cancel':
+            # Only restore car if it was checked out (active)
+            if booking.status == 'active':
+                booking.car.status = 'available'
+                booking.car.save()
             booking.status = 'cancelled'
-            messages.warning(request, f"Booking {booking.id} cancelled.")
-        
+            messages.warning(request, f"Booking #{booking.id} cancelled.")
+
+        elif action == 'reject':
+            booking.status = 'rejected'
+            messages.error(request, f"Booking #{booking.id} rejected.")
+
         booking.save()
         return redirect('staff_dashboard')
