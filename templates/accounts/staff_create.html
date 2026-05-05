@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block title %}Create Staff Account — TrustDrive Admin{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-dark-blue">
+    <div class="container py-3">
+        <nav aria-label="breadcrumb" class="mb-2">
+            <ol class="breadcrumb mb-0 extra-small uppercase ls-2">
+                <li class="breadcrumb-item"><a href="{% url 'admin_dashboard' %}" class="text-white opacity-50 text-decoration-none">Admin</a></li>
+                <li class="breadcrumb-item active text-white">Create Staff</li>
+            </ol>
+        </nav>
+        <h1 class="fw-bold mb-0 text-white display-6">Create Staff Account</h1>
+        <p class="text-white opacity-75 mb-0 small uppercase ls-1">New operational team member</p>
+    </div>
+</section>
+
+<section class="py-5" style="min-height: 70vh; background:#f8fafc;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="bg-white p-5 shadow-sm border-0">
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <div class="td-avatar" style="width:42px;height:42px;font-size:1.1rem;">
+                            <i class="bi bi-person-badge"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold mb-0 text-dark-blue">New Staff Member</h5>
+                            <p class="extra-small text-muted mb-0 uppercase ls-1">Role will be set to STAFF automatically</p>
+                        </div>
+                    </div>
+
+                    <!-- Non-field errors -->
+                    {% if form.non_field_errors %}
+                    <div class="alert alert-danger border-0 small">
+                        {% for e in form.non_field_errors %}{{ e }}{% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            {% for field in form %}
+                            <div class="col-12">
+                                <label class="form-label fw-bold extra-small uppercase ls-1 text-muted">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.errors %}
+                                <div class="text-danger extra-small mt-1">{{ field.errors|join:", " }}</div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="alert alert-info border-0 small mt-4 py-2">
+                            <i class="bi bi-shield-check me-2"></i>
+                            This account will have <strong>Staff</strong> access only. Admin privileges are not granted.
+                        </div>
+
+                        <div class="d-flex gap-3 mt-4">
+                            <button type="submit" class="btn btn-dark-blue flex-grow-1 py-3 fw-bold uppercase ls-1">
+                                <i class="bi bi-person-plus me-2"></i>Create Staff Account
+                            </button>
+                            <a href="{% url 'admin_dashboard' %}" class="btn btn-outline-secondary py-3 px-4">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.form-control, .form-select {
+    border-radius: 0;
+    border: 1px solid #e2e8f0;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.875rem;
+}
+.form-control:focus, .form-select:focus {
+    border-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16,185,129,0.1);
+}
+</style>
+{% endblock %}

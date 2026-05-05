@@ -178,6 +178,84 @@
                 </div>
             </div>
 
+            <!-- ── Staff Management Panel (Admin only) ── -->
+            <div class="row g-4 mt-3 mb-4">
+                <div class="col-12">
+                    <div class="p-4 bg-white border border-light shadow-sm">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div>
+                                <h5 class="fw-bold mb-0 text-dark-blue">STAFF MANAGEMENT</h5>
+                                <p class="text-muted small mb-0">Active operational team members</p>
+                            </div>
+                            <a href="{% url 'staff_create' %}" class="btn btn-dark-blue px-4 py-2 fw-bold uppercase ls-1 small">
+                                <i class="bi bi-person-plus me-2"></i>Add Staff
+                            </a>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead style="background:#f8fafc;">
+                                    <tr class="text-muted extra-small fw-bold ls-1 uppercase">
+                                        <th class="border-0 px-4 py-3">Member</th>
+                                        <th class="border-0 py-3">Email</th>
+                                        <th class="border-0 py-3">Joined</th>
+                                        <th class="border-0 py-3">Status</th>
+                                        <th class="border-0 py-3 text-end px-4">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for staff in staff_list %}
+                                    <tr>
+                                        <td class="px-4 py-3">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="td-avatar" style="width:28px;height:28px;font-size:0.65rem;flex-shrink:0;">
+                                                    {{ staff.username|slice:":1"|upper }}
+                                                </div>
+                                                <span class="fw-bold text-dark-blue">{{ staff.username }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="py-3 text-muted small">{{ staff.email }}</td>
+                                        <td class="py-3 small text-muted">{{ staff.date_joined|date:"d M Y" }}</td>
+                                        <td class="py-3">
+                                            {% if staff.is_active %}
+                                                <span class="badge bg-success px-3 py-1 extra-small">ACTIVE</span>
+                                            {% else %}
+                                                <span class="badge bg-secondary px-3 py-1 extra-small">INACTIVE</span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="py-3 text-end px-4">
+                                            <div class="d-flex gap-2 justify-content-end">
+                                                <!-- Toggle active/inactive -->
+                                                <form method="post" action="{% url 'staff_toggle' staff.pk %}" class="d-inline">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-sm {% if staff.is_active %}btn-outline-warning{% else %}btn-outline-success{% endif %} px-3 uppercase ls-1 extra-small fw-bold">
+                                                        {% if staff.is_active %}Deactivate{% else %}Activate{% endif %}
+                                                    </button>
+                                                </form>
+                                                <!-- Edit -->
+                                                <a href="{% url 'user_edit' staff.pk %}" class="btn btn-sm btn-outline-primary px-3 uppercase ls-1 extra-small fw-bold">Edit</a>
+                                                <!-- Remove (demote to customer) -->
+                                                <form method="post" action="{% url 'staff_remove' staff.pk %}" class="d-inline"
+                                                      onsubmit="return confirm('Remove {{ staff.username }} from staff? They will be demoted to customer.');">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger px-3 uppercase ls-1 extra-small fw-bold">Remove</button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="5" class="text-center py-5 text-muted">
+                                            No staff members yet. <a href="{% url 'staff_create' %}" class="text-accent text-decoration-none fw-bold">Add your first staff member.</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         {% elif user.role == 'staff' %}
             <!-- Staff Hub -->
             <div class="row g-4 mb-5">
