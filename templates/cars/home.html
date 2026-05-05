@@ -1,13 +1,39 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block navbar %}{% endblock navbar %}
+
 {% block content %}
 <!-- ══════════════════════════════════════
      CINEMATIC HERO SECTION
 ══════════════════════════════════════ -->
-<section class="hero-cinematic">
+<section class="hero-cinematic position-relative">
 
-    <!-- Login & Sign In Buttons Redesign (Logic in base.html, but checking context here) -->
+    <!-- Hero Custom Navbar (Dribbble Style) -->
+    <nav class="position-absolute top-0 w-100 px-4 py-4 d-flex justify-content-between align-items-center" style="z-index: 100;">
+        <!-- Logo -->
+        <a href="{% url 'home' %}" class="text-white text-decoration-none fs-4" style="font-weight: 500; letter-spacing: 0.5px;">
+            TrustDrive
+        </a>
+
+        <!-- Center Pill -->
+        <div class="d-none d-md-flex align-items-center gap-4 px-4 py-2 shadow-sm" style="background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.1);">
+            <a href="{% url 'home' %}" class="text-white text-decoration-none fw-medium transition-all-300 hover-opacity-75" style="font-size: 0.95rem;">Home</a>
+            <a href="{% url 'car_list' %}" class="text-white text-decoration-none fw-medium transition-all-300 hover-opacity-75" style="font-size: 0.95rem;">Fleet</a>
+            <a href="{% url 'services' %}" class="text-white text-decoration-none fw-medium transition-all-300 hover-opacity-75" style="font-size: 0.95rem;">Services</a>
+            <a href="{% url 'about' %}" class="text-white text-decoration-none fw-medium transition-all-300 hover-opacity-75" style="font-size: 0.95rem;">About</a>
+        </div>
+
+        <!-- Right Button -->
+        <a href="{% url 'car_list' %}" class="btn bg-white text-dark rounded-pill d-flex align-items-center gap-2 border-0 px-3 py-2 fw-bold shadow-sm transition-all-300 hover-scale-105" style="font-size: 0.9rem;">
+            Book Now 
+            <span class="d-inline-flex align-items-center justify-content-center bg-dark text-white rounded-circle" style="width: 24px; height: 24px; font-size: 0.75rem;">
+                <i class="bi bi-arrow-up-right"></i>
+            </span>
+        </a>
+    </nav>
+
+    <!-- Hero Content & Background -->
     <div class="hero-bg">
         <img src="https://images.unsplash.com/photo-1494905998402-395d579af36f?q=80&w=1200" alt="TrustDrive Premium Fleet" class="hero-bg-img" id="heroBgImg">
         <!-- Neutral Gradient overlays -->
@@ -445,16 +471,201 @@
                         <i class="bi bi-globe-americas text-accent fs-4"></i>
                         <span class="fw-bold small ls-1">GLOBAL COVERAGE</span>
                     </div>
+       <!-- ── TESTIMONIALS SECTION ── -->
+<section class="py-3" style="background: #0a0a0a;">
+    <div class="container py-2 text-center" style="max-width: 60%;">
+        <h2 class="display-6 fw-black text-white mb-1" style="letter-spacing: -0.5px; line-height: 1.1; font-size: 2rem;">Hear What Our Customers Say</h2>
+        <p class="text-muted mb-3" style="font-size: 0.8rem;">Real feedback from clients who enjoyed comfort, performance.</p>
+
+        <div class="position-relative mt-2">
+            <div id="testimonialSlider" class="d-flex gap-3 overflow-x-auto pb-2 hide-scrollbar px-3 px-md-5" style="scroll-snap-type: x mandatory; scroll-behavior: smooth; padding-top: 0.5rem; padding-bottom: 0.5rem;">
+                
+                {% for review in recent_reviews %}
+                <div class="testimonial-card flex-shrink-0" style="width: 320px; scroll-snap-align: center;">
+                    <div class="p-3 transition-all-300 testimonial-inner bg-custom-dark" style="border-radius: 16px;">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="https://ui-avatars.com/api/?name={{ review.user.username }}&background=random" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+                                <div style="line-height: 1.1;">
+                                    <h6 class="mb-0 fw-bold t-name text-white" style="font-size: 0.8rem;">{{ review.user.get_full_name|default:review.user.username }}</h6>
+                                    <span class="text-muted" style="font-size: 0.65rem;">@{{ review.user.username }}</span>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-1 fw-bold t-rating text-white" style="font-size: 0.75rem;">
+                                <i class="bi bi-star-fill text-warning"></i> {{ review.rating }}.0
+                            </div>
+                        </div>
+                        <p class="mb-0 fw-medium t-text text-muted line-clamp-2" style="font-size: 0.8rem; line-height: 1.4;">
+                            "{{ review.comment }}"
+                        </p>
+                    </div>
                 </div>
+                {% empty %}
+                <!-- Placeholder 1 -->
+                <div class="testimonial-card flex-shrink-0" style="width: 320px; scroll-snap-align: center;">
+                    <div class="p-3 transition-all-300 testimonial-inner bg-custom-dark" style="border-radius: 16px;">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="https://i.pravatar.cc/100?img=5" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+                                <div style="line-height: 1.1;">
+                                    <h6 class="mb-0 fw-bold t-name text-white" style="font-size: 0.8rem;">Sarah A.</h6>
+                                    <span class="text-muted" style="font-size: 0.65rem;">@saraha</span>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-1 fw-bold t-rating text-white" style="font-size: 0.75rem;">
+                                <i class="bi bi-star-fill text-warning"></i> 4.9
+                            </div>
+                        </div>
+                        <p class="mb-0 fw-medium t-text text-muted line-clamp-2" style="font-size: 0.8rem; line-height: 1.4;">
+                            "An unforgettable experience from start to finish. The car was flawless and the service was exceptional."
+                        </p>
+                    </div>
+                </div>
+                <!-- Placeholder 2 -->
+                <div class="testimonial-card flex-shrink-0" style="width: 320px; scroll-snap-align: center;">
+                    <div class="p-3 transition-all-300 testimonial-inner bg-custom-dark" style="border-radius: 16px;">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="https://i.pravatar.cc/100?img=11" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+                                <div style="line-height: 1.1;">
+                                    <h6 class="mb-0 fw-bold t-name text-white" style="font-size: 0.8rem;">Daniel R.</h6>
+                                    <span class="text-muted" style="font-size: 0.65rem;">@danisrs</span>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-1 fw-bold t-rating text-white" style="font-size: 0.75rem;">
+                                <i class="bi bi-star-fill text-warning"></i> 4.9
+                            </div>
+                        </div>
+                        <p class="mb-0 fw-medium t-text text-muted line-clamp-2" style="font-size: 0.8rem; line-height: 1.4;">
+                            "Highly recommended. The attention to detail and premium feel made my weekend getaway perfect."
+                        </p>
+                    </div>
+                </div>
+                <!-- Placeholder 3 -->
+                <div class="testimonial-card flex-shrink-0" style="width: 320px; scroll-snap-align: center;">
+                    <div class="p-3 transition-all-300 testimonial-inner bg-custom-dark" style="border-radius: 16px;">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="https://i.pravatar.cc/100?img=33" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+                                <div style="line-height: 1.1;">
+                                    <h6 class="mb-0 fw-bold t-name text-white" style="font-size: 0.8rem;">Sophia M.</h6>
+                                    <span class="text-muted" style="font-size: 0.65rem;">@sophiam</span>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-1 fw-bold t-rating text-white" style="font-size: 0.75rem;">
+                                <i class="bi bi-star-fill text-warning"></i> 5.0
+                            </div>
+                        </div>
+                        <p class="mb-0 fw-medium t-text text-muted line-clamp-2" style="font-size: 0.8rem; line-height: 1.4;">
+                            "The best car rental service I have ever used. Everything was smooth, transparent, and luxurious."
+                        </p>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
-            <div class="col-lg-6 reveal reveal-left">
-                <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=800" alt="Premium Driving Experience" class="img-fluid rounded-4 shadow-lg border border-light">
-            </div>
+        </div>
+
+        <!-- Navigation Arrows -->
+        <div class="d-flex justify-content-center align-items-center gap-3 mt-1">
+            <button id="btnPrevTestimonial" class="btn btn-link text-muted text-decoration-none p-0 transition-all-300 hover-scale-110">
+                <i class="bi bi-arrow-left fs-6"></i>
+            </button>
+            <button id="btnNextTestimonial" class="btn bg-white text-black rounded-circle p-0 d-flex align-items-center justify-content-center shadow transition-all-300 hover-scale-110" style="width: 32px; height: 32px;">
+                <i class="bi bi-arrow-right fs-6"></i>
+            </button>
         </div>
     </div>
 </section>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const slider = document.getElementById('testimonialSlider');
+    const cards = document.querySelectorAll('.testimonial-card');
+    const btnPrev = document.getElementById('btnPrevTestimonial');
+    const btnNext = document.getElementById('btnNextTestimonial');
+
+    function updateActiveCard() {
+        if (!slider || cards.length === 0) return;
+        const sliderCenter = slider.scrollLeft + slider.clientWidth / 2;
+        let closestCard = null;
+        let minDistance = Infinity;
+
+        cards.forEach(card => {
+            const cardCenter = card.offsetLeft - slider.offsetLeft + card.clientWidth / 2;
+            const distance = Math.abs(sliderCenter - cardCenter);
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestCard = card;
+            }
+        });
+
+        cards.forEach(card => {
+            const inner = card.querySelector('.testimonial-inner');
+            const name = card.querySelector('.t-name');
+            const rating = card.querySelector('.t-rating');
+            const text = card.querySelector('.t-text');
+
+            if (card === closestCard) {
+                inner.classList.remove('bg-custom-dark');
+                inner.classList.add('bg-white', 'shadow-lg', 'scale-active');
+                name.classList.remove('text-white'); name.classList.add('text-dark');
+                rating.classList.remove('text-white'); rating.classList.add('text-dark');
+                text.classList.remove('text-muted'); text.classList.add('text-dark');
+            } else {
+                inner.classList.add('bg-custom-dark');
+                inner.classList.remove('bg-white', 'shadow-lg', 'scale-active');
+                name.classList.add('text-white'); name.classList.remove('text-dark');
+                rating.classList.add('text-white'); rating.classList.remove('text-dark');
+                text.classList.add('text-muted'); text.classList.remove('text-dark');
+            }
+        });
+    }
+
+    if (slider) {
+        slider.addEventListener('scroll', updateActiveCard);
+        
+        // Initial setup
+        setTimeout(() => {
+            if(cards.length > 1 && slider.scrollLeft === 0) {
+                slider.scrollLeft = cards[1].offsetLeft - slider.offsetLeft - (slider.clientWidth / 2) + (cards[1].clientWidth / 2);
+            }
+            updateActiveCard();
+        }, 100);
+
+        btnNext.addEventListener('click', () => {
+            slider.scrollBy({ left: 320 + 16, behavior: 'smooth' }); 
+        });
+        
+        btnPrev.addEventListener('click', () => {
+            slider.scrollBy({ left: -(320 + 16), behavior: 'smooth' });
+        });
+    }
+});
+</script>
+
 <style>
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .bg-custom-dark { background: #1c1c1e !important; }
+    .scale-active { transform: scale(1.02); z-index: 2; position: relative; }
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>ft: -(350 + 24), behavior: 'smooth' });
+        });
+    }
+});
+</script>
+
+<style>
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .bg-custom-dark { background: #1c1c1e !important; }
+    .scale-105 { transform: scale(1.05); z-index: 2; position: relative; }
     .ls-1 { letter-spacing: 1px; }
     .extra-small { font-size: 0.7rem; }
 </style>

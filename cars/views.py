@@ -14,6 +14,7 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['featured_cars'] = Car.objects.filter(status='available')[:6]
+        context['recent_reviews'] = Review.objects.filter(rating__gte=4).select_related('user').order_by('-created_at')[:10]
         return context
 
 class AboutView(TemplateView):

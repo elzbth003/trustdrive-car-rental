@@ -81,10 +81,15 @@
                             </ul>
                         </div>
                     {% else %}
-                        <!-- BOOK NOW — goes to login; from there users can register -->
-                        <a href="{% url 'login' %}?next={% url 'car_list' %}" class="td-book-btn">
-                            Book Now <span class="btn-icon-circle"><i class="bi bi-arrow-up-right"></i></span>
-                        </a>
+                        <!-- Authentication and Language -->
+                        <div class="d-flex align-items-center gap-2">
+                            <a href="#" class="td-lang-pill text-decoration-none d-flex align-items-center justify-content-center">
+                                <i class="bi bi-globe2"></i> <span class="ms-1" style="font-size: 0.75rem; font-weight: 600;">EN</span>
+                            </a>
+                            <a href="{% url 'login' %}?next={% url 'car_list' %}" class="td-book-btn td-auth-btn">
+                                Log in / Sign up
+                            </a>
+                        </div>
                     {% endif %}
                 </div>
             </div>
@@ -103,18 +108,24 @@
     }
 
     /* ── Transparent (hero/home state) ── */
-    .td-navbar--transparent { background: transparent !important; box-shadow: none !important; }
+    .td-navbar--transparent { background: transparent !important; box-shadow: none !important; border: none !important; }
     .td-navbar--transparent .td-brand-text,
     .td-navbar--transparent .td-uname  { color: rgba(255,255,255,0.9) !important; }
     .td-navbar--transparent .td-nav-link { color: rgba(255,255,255,0.85) !important; }
     .td-navbar--transparent .td-nav-link:hover { color: #ffffff !important; }
     
-    /* Glassmorphism Pill for Links - Background removed as requested */
+    /* Links (Hero Section / Transparent State) */
     @media (min-width: 992px) {
         .td-navbar--transparent .navbar-nav {
             background: transparent;
-            padding: 0.25rem 1.5rem;
+            padding: 0.35rem 1.5rem;
             border: none;
+        }
+        .td-navbar--transparent .navbar-nav .nav-link {
+            padding: 0.5rem 1rem !important;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            font-weight: 500;
         }
     }
     .td-navbar--transparent .td-bar    { background: #fff; }
@@ -129,6 +140,20 @@
         color: #ffffff;
     }
     .td-navbar--transparent .td-book-btn:hover { background: #f8fafc; color: #000000; border-color: #f8fafc; }
+    
+    .td-navbar--transparent .td-lang-pill {
+        height: 38px;
+        padding: 0 12px;
+        border-radius: 50px;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.15);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        color: rgba(255,255,255,0.85) !important;
+        transition: all 0.3s ease;
+    }
+    .td-navbar--transparent .td-lang-pill:hover { background: rgba(255,255,255,0.15); color: #fff !important; }
+
     .td-navbar--transparent .td-avatar  { background: #eab308; }
     .td-navbar--transparent .td-uname,
     .td-navbar--transparent .dropdown-toggle { color: rgba(255,255,255,0.9) !important; }
@@ -157,6 +182,18 @@
         color: #212529;
     }
     .td-navbar--solid .td-book-btn:hover { background: #343a40; color: #ffffff; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.15); border-color: #343a40; }
+    
+    .td-navbar--solid .td-lang-pill {
+        height: 38px;
+        padding: 0 12px;
+        border-radius: 50px;
+        background: #f8f9fa;
+        border: 1px solid #e2e8f0;
+        color: #475569 !important;
+        transition: all 0.3s ease;
+    }
+    .td-navbar--solid .td-lang-pill:hover { background: #e2e8f0; color: #212529 !important; }
+
     .td-navbar--solid .td-avatar  { background: #eab308; }
     .td-navbar--solid .dropdown-toggle { color: #475569 !important; }
 
@@ -197,6 +234,12 @@
         white-space: nowrap;
         transition: all 0.3s ease;
         border-radius: 50px;
+    }
+    
+    .td-auth-btn {
+        padding: 0.5rem 1.25rem !important;
+        font-size: 0.85rem !important;
+        gap: 0 !important;
     }
     .btn-icon-circle {
         display: inline-flex;
