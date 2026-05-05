@@ -10,8 +10,10 @@
                 <li class="breadcrumb-item active text-white">Edit User</li>
             </ol>
         </nav>
-        <h1 class="fw-bold mb-0 text-white display-6">Edit User: {{ target.username }}</h1>
-        <p class="text-white opacity-75 mb-0 small uppercase ls-1">Modify role, status, and contact details</p>
+        <h1 class="fw-bold mb-0 text-white display-6">Edit Staff: {{ target.username }}</h1>
+        <p class="text-white opacity-75 mb-0 small uppercase ls-1">
+            {% if target.role == 'staff' %}Modify status and contact details{% else %}Modify role, status, and contact details{% endif %}
+        </p>
     </div>
 </section>
 
@@ -51,6 +53,10 @@
                         {% csrf_token %}
                         <div class="row g-3">
                             {% for field in form %}
+                            {% if field.name == 'role' and target.role == 'staff' %}
+                                {# Role field hidden for staff — role is fixed as 'staff' #}
+                                {{ field.as_hidden }}
+                            {% else %}
                             <div class="col-12">
                                 <label class="form-label fw-bold extra-small uppercase ls-1 text-muted">{{ field.label }}</label>
                                 {{ field }}
@@ -58,13 +64,16 @@
                                 <div class="text-danger extra-small mt-1">{{ field.errors|join:", " }}</div>
                                 {% endif %}
                             </div>
+                            {% endif %}
                             {% endfor %}
                         </div>
 
+                        {% if target.role != 'staff' %}
                         <div class="alert alert-warning border-0 small mt-4 py-2">
                             <i class="bi bi-exclamation-triangle me-2"></i>
                             Role changes take effect immediately. All actions are logged.
                         </div>
+                        {% endif %}
 
                         <div class="d-flex gap-3 mt-4">
                             <button type="submit" class="btn btn-dark-blue flex-grow-1 py-3 fw-bold uppercase ls-1">
