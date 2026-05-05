@@ -105,7 +105,11 @@ class MaintenanceListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         return self.request.user.role in ['admin', 'staff']
 
     def get_queryset(self):
-        return MaintenanceLog.objects.select_related('car', 'logged_by').order_by('-date')
+        queryset = MaintenanceLog.objects.select_related('car', 'logged_by').order_by('-date')
+        car_id = self.request.GET.get('car')
+        if car_id:
+            queryset = queryset.filter(car_id=car_id)
+        return queryset
 
 class MaintenanceCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = MaintenanceLog

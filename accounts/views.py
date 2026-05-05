@@ -105,7 +105,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
             # Chart data
             status_counts = Booking.objects.values('status').annotate(count=Count('id'))
-            context['status_labels'] = json.dumps([i['status'].upper() for i in status_counts])
+            context['status_labels'] = json.dumps([str(i['status']).upper() if i['status'] else "UNKNOWN" for i in status_counts])
             context['status_data'] = json.dumps([i['count'] for i in status_counts])
 
             brand_revenue = (
@@ -113,7 +113,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                 .values('car__brand')
                 .annotate(total=Sum('total_price'))
             )
-            context['brand_labels'] = json.dumps([i['car__brand'].upper() for i in brand_revenue])
+            context['brand_labels'] = json.dumps([str(i['car__brand']).upper() if i['car__brand'] else "UNKNOWN" for i in brand_revenue])
             context['brand_data'] = json.dumps([float(i['total']) if i['total'] else 0 for i in brand_revenue])
 
             context['staff_list'] = User.objects.filter(role='staff').order_by('-date_joined')

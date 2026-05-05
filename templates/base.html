@@ -23,10 +23,10 @@
             <!-- Brand -->
             <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
                 <svg class="me-2" width="28" height="28" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 2L4 5V11C4 16.1 7.4 20.8 12 22C16.6 20.8 20 16.1 20 11V5L12 2Z" fill="#10b981"/>
+                    <path d="M12 2L4 5V11C4 16.1 7.4 20.8 12 22C16.6 20.8 20 16.1 20 11V5L12 2Z" fill="#eab308"/>
                     <path d="M9 12L11 14L15 10" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <span class="td-brand-text fw-bold">TRUST</span><span class="text-accent fw-black">DRIVE</span>
+                <span class="td-brand-text fw-bold">TRUST</span><span class="fw-black" style="color: #6c757d;">DRIVE</span>
             </a>
 
             <!-- Mobile Toggler -->
@@ -60,13 +60,16 @@
                                     <p class="mb-0 small fw-bold text-dark">{{ user.username }}</p>
                                     <p class="mb-0 extra-small text-muted">{{ user.email }}</p>
                                 </li>
-                                <li><a class="dropdown-item td-dd-item" href="{% url 'dashboard' %}"><i class="bi bi-speedometer2 me-2 text-accent"></i>My Dashboard</a></li>
                                 {% if user.role == 'admin' or user.is_superuser %}
                                     <li><a class="dropdown-item td-dd-item fw-bold text-accent" href="/admin/"><i class="bi bi-shield-lock me-2"></i>System Admin</a></li>
                                     <li><a class="dropdown-item td-dd-item" href="{% url 'admin_dashboard' %}"><i class="bi bi-grid me-2 text-muted"></i>Admin Dashboard</a></li>
                                     <li><a class="dropdown-item td-dd-item" href="{% url 'staff_dashboard' %}"><i class="bi bi-people me-2 text-muted"></i>Staff Dashboard</a></li>
+                                    <li><a class="dropdown-item td-dd-item" href="{% url 'maintenance_list' %}"><i class="bi bi-tools me-2 text-muted"></i>Maintenance Logs</a></li>
                                 {% elif user.role == 'staff' %}
                                     <li><a class="dropdown-item td-dd-item" href="{% url 'staff_dashboard' %}"><i class="bi bi-people me-2 text-muted"></i>Staff Dashboard</a></li>
+                                    <li><a class="dropdown-item td-dd-item" href="{% url 'maintenance_list' %}"><i class="bi bi-tools me-2 text-muted"></i>Maintenance Logs</a></li>
+                                {% else %}
+                                    <li><a class="dropdown-item td-dd-item" href="{% url 'dashboard' %}"><i class="bi bi-calendar-check me-2 text-accent"></i>My Reservations</a></li>
                                 {% endif %}
                                 <li><hr class="dropdown-divider my-1"></li>
                                 <li>
@@ -80,7 +83,7 @@
                     {% else %}
                         <!-- BOOK NOW — goes to login; from there users can register -->
                         <a href="{% url 'login' %}?next={% url 'car_list' %}" class="td-book-btn">
-                            BOOK NOW <i class="bi bi-arrow-right ms-2"></i>
+                            Book Now <span class="btn-icon-circle"><i class="bi bi-arrow-up-right"></i></span>
                         </a>
                     {% endif %}
                 </div>
@@ -94,56 +97,76 @@
         position: fixed;
         top: 0; left: 0; right: 0;
         z-index: 1050;
-        padding: 1.4rem 0;
+        padding: 1rem 0;
         transition: background 0.4s ease, padding 0.4s ease, box-shadow 0.4s ease;
         will-change: background, padding;
     }
 
     /* ── Transparent (hero/home state) ── */
-    .td-navbar--transparent { background: transparent; box-shadow: none; }
+    .td-navbar--transparent { background: transparent !important; box-shadow: none !important; }
     .td-navbar--transparent .td-brand-text,
-    .td-navbar--transparent .td-nav-link,
     .td-navbar--transparent .td-uname  { color: rgba(255,255,255,0.9) !important; }
+    .td-navbar--transparent .td-nav-link { color: rgba(255,255,255,0.85) !important; }
+    .td-navbar--transparent .td-nav-link:hover { color: #ffffff !important; }
+    
+    /* Glassmorphism Pill for Links - Background removed as requested */
+    @media (min-width: 992px) {
+        .td-navbar--transparent .navbar-nav {
+            background: transparent;
+            padding: 0.25rem 1.5rem;
+            border: none;
+        }
+    }
     .td-navbar--transparent .td-bar    { background: #fff; }
     .td-navbar--transparent .td-book-btn {
-        border-color: rgba(255,255,255,0.6);
-        color: #fff;
-        background: transparent;
+        background: #ffffff;
+        color: #000000;
+        border-color: #ffffff;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
-    .td-navbar--transparent .td-book-btn:hover { background: #fff; color: #0f172a; border-color: #fff; }
-    .td-navbar--transparent .td-avatar  { background: #10b981; }
+    .td-navbar--transparent .td-book-btn .btn-icon-circle {
+        background: #000000;
+        color: #ffffff;
+    }
+    .td-navbar--transparent .td-book-btn:hover { background: #f8fafc; color: #000000; border-color: #f8fafc; }
+    .td-navbar--transparent .td-avatar  { background: #eab308; }
     .td-navbar--transparent .td-uname,
     .td-navbar--transparent .dropdown-toggle { color: rgba(255,255,255,0.9) !important; }
 
     /* ── Solid (scrolled OR non-hero pages) ── */
     .td-navbar--solid {
-        background: #0f172a;
-        box-shadow: 0 4px 24px rgba(0,0,0,0.2);
-        padding: 0.75rem 0;
+        background: #ffffff;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        padding: 0.85rem 0; /* Slightly increased padding */
     }
-    .td-navbar--solid .td-brand-text { color: #fff !important; }
-    .td-navbar--solid .td-uname      { color: rgba(255,255,255,0.85) !important; }
-    .td-navbar--solid .td-nav-link   { color: rgba(255,255,255,0.72) !important; }
+    .td-navbar--solid .td-brand-text { color: #212529 !important; }
+    .td-navbar--solid .td-uname      { color: #475569 !important; }
+    .td-navbar--solid .td-nav-link   { color: #212529 !important; }
     .td-navbar--solid .td-nav-link:hover,
-    .td-navbar--solid .td-nav-link.td-active { color: #10b981 !important; }
+    .td-navbar--solid .td-nav-link.td-active { color: #eab308 !important; }
     .td-navbar--solid .td-nav-link.td-active::after { transform: scaleX(1); }
-    .td-navbar--solid .td-bar        { background: #fff; }
+    .td-navbar--solid .td-bar        { background: #212529; }
     .td-navbar--solid .td-book-btn {
-        background: #10b981;
-        border-color: #10b981;
-        color: #fff;
+        background: #212529;
+        border-color: #212529;
+        color: #ffffff;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
-    .td-navbar--solid .td-book-btn:hover { background: #059669; border-color: #059669; }
-    .td-navbar--solid .td-avatar  { background: #10b981; }
-    .td-navbar--solid .dropdown-toggle { color: rgba(255,255,255,0.85) !important; }
+    .td-navbar--solid .td-book-btn .btn-icon-circle {
+        background: #ffffff;
+        color: #212529;
+    }
+    .td-navbar--solid .td-book-btn:hover { background: #343a40; color: #ffffff; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.15); border-color: #343a40; }
+    .td-navbar--solid .td-avatar  { background: #eab308; }
+    .td-navbar--solid .dropdown-toggle { color: #475569 !important; }
 
     /* ── Nav link base ── */
     .td-nav-link {
-        font-size: 0.78rem;
-        font-weight: 700;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        padding: 0.45rem 0.9rem !important;
+        font-size: 0.85rem;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        text-transform: capitalize;
+        padding: 0.5rem 1rem !important;
         transition: color 0.2s ease;
         position: relative;
     }
@@ -152,32 +175,48 @@
         position: absolute;
         bottom: 0; left: 0.9rem; right: 0.9rem;
         height: 2px;
-        background: #10b981;
+        background: #eab308;
         transform: scaleX(0);
         transition: transform 0.25s ease;
         transform-origin: left;
     }
     .td-nav-link:hover::after { transform: scaleX(1); }
 
-    /* ── BOOK NOW CTA ── */
+    /* ── Base button ── */
     .td-book-btn {
         display: inline-flex;
         align-items: center;
-        padding: 0.55rem 1.6rem;
-        font-size: 0.72rem;
-        font-weight: 700;
-        letter-spacing: 2px;
-        text-transform: uppercase;
+        justify-content: center;
+        padding: 0.35rem 0.4rem 0.35rem 1.2rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0px;
+        text-transform: capitalize;
         text-decoration: none;
-        border: 1.5px solid;
+        border: 1px solid;
         white-space: nowrap;
         transition: all 0.3s ease;
+        border-radius: 50px;
+    }
+    .btn-icon-circle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        margin-left: 0.75rem;
+        font-size: 0.7rem;
+        transition: all 0.3s ease;
+    }
+    .td-book-btn:hover .btn-icon-circle {
+        transform: rotate(45deg);
     }
 
     /* ── Avatar ── */
     .td-avatar {
         width: 30px; height: 30px;
-        background: #10b981;
+        background: #eab308;
         color: #fff;
         font-size: 0.7rem;
         font-weight: 800;
@@ -204,13 +243,14 @@
 
     /* Mobile collapse styling */
     @media (max-width: 991px) {
-        .td-navbar--transparent.navbar-open,
-        .td-navbar { background: #0f172a !important; }
-        .td-navbar .td-nav-link { color: rgba(255,255,255,0.8) !important; padding: 0.65rem 1rem !important; }
-        .td-navbar .td-nav-link:hover { color: #10b981 !important; }
-        .td-navbar .td-brand-text,
-        .td-navbar .td-uname { color: #fff !important; }
-        .td-navbar .td-bar { background: #fff; }
+        .td-navbar--transparent.navbar-open { background: #212529 !important; }
+        .td-navbar--transparent.navbar-open .td-nav-link { color: rgba(255,255,255,0.8) !important; padding: 0.65rem 1rem !important; }
+        .td-navbar--transparent.navbar-open .td-nav-link:hover { color: #eab308 !important; }
+        .td-navbar--transparent.navbar-open .td-brand-text,
+        .td-navbar--transparent.navbar-open .td-uname { color: #fff !important; }
+        .td-navbar--transparent.navbar-open .td-bar { background: #fff; }
+        
+        .td-navbar--solid .td-nav-link { padding: 0.65rem 1rem !important; }
     }
 
     .extra-small { font-size: 0.7rem; }
@@ -239,7 +279,7 @@
                     <div class="mb-4">
                         <div class="d-flex align-items-center">
                             <svg class="me-2" width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 2L4 5V11C4 16.1 7.4 20.8 12 22C16.6 20.8 20 16.1 20 11V5L12 2Z" fill="#6082B6"/>
+                                <path d="M12 2L4 5V11C4 16.1 7.4 20.8 12 22C16.6 20.8 20 16.1 20 11V5L12 2Z" fill="#6c757d"/>
                                 <path d="M9 12L11 14L15 10" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                             <span class="fw-bold fs-4 text-white">TRUST<span class="text-accent">DRIVE</span></span>
@@ -331,6 +371,17 @@
                 }
             });
         });
+
+        // Toggle navbar-open class for mobile menu background
+        var navbarNav = document.getElementById('navbarNav');
+        if (navbarNav) {
+            navbarNav.addEventListener('show.bs.collapse', function () {
+                nav.classList.add('navbar-open');
+            });
+            navbarNav.addEventListener('hide.bs.collapse', function () {
+                nav.classList.remove('navbar-open');
+            });
+        }
     })();
     </script>
 </body>

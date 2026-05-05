@@ -145,7 +145,7 @@
                                             {% elif booking.status == 'active' %}
                                                 <span class="badge rounded-pill px-3 py-2 fw-bold" style="background: #3b82f6; color: white; font-size: 0.65rem;">ACTIVE</span>
                                             {% elif booking.status == 'completed' %}
-                                                <span class="badge rounded-pill px-3 py-2 fw-bold" style="background: #10b981; color: white; font-size: 0.65rem;">COMPLETED</span>
+                                                <span class="badge rounded-pill px-3 py-2 fw-bold" style="background: #eab308; color: white; font-size: 0.65rem;">COMPLETED</span>
                                             {% else %}
                                                 <span class="badge rounded-pill px-3 py-2 fw-bold text-uppercase" style="background: #64748b; color: white; font-size: 0.65rem;">{{ booking.status }}</span>
                                             {% endif %}
@@ -353,7 +353,7 @@
                                             {% elif booking.status == 'active' %}
                                                 <span class="badge rounded-pill px-3 py-2 fw-bold" style="background: #3b82f6; color: white; font-size: 0.65rem;">ACTIVE</span>
                                             {% elif booking.status == 'completed' %}
-                                                <span class="badge rounded-pill px-3 py-2 fw-bold" style="background: #10b981; color: white; font-size: 0.65rem;">COMPLETED</span>
+                                                <span class="badge rounded-pill px-3 py-2 fw-bold" style="background: #eab308; color: white; font-size: 0.65rem;">COMPLETED</span>
                                             {% else %}
                                                 <span class="badge rounded-pill px-3 py-2 fw-bold text-uppercase" style="background: #64748b; color: white; font-size: 0.65rem;">{{ booking.status }}</span>
                                             {% endif %}
@@ -385,7 +385,7 @@
 
     .ls-1 { letter-spacing: 1.5px; }
     .extra-small { font-size: 0.65rem; }
-    .status-approved { border-color: #059669; color: #059669; background-color: #f0fdf4; }
+    .status-approved { border-color: #ca8a04; color: #ca8a04; background-color: #f0fdf4; }
     .status-pending { border-color: #d97706; color: #d97706; background-color: #fffbeb; }
     .status-rejected { border-color: #dc2626; color: #dc2626; background-color: #fef2f2; }
     .table thead th { border-bottom: 2px solid var(--border-light) !important; }
@@ -417,7 +417,7 @@
                             '#f97316', // pending (orange)
                             '#0ea5e9', // confirmed (blue)
                             '#3b82f6', // active (indigo)
-                            '#10b981', // completed (green)
+                            '#eab308', // completed (green)
                             '#ef4444'  // cancelled (red)
                         ],
                         borderWidth: 0,

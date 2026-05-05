@@ -218,7 +218,7 @@
                                         </a>
                                     {% else %}
                                         <a href="{% url 'car_edit' car.id %}" class="btn btn-outline-dark-blue btn-lg py-3 fw-medium ls-3 rounded-0 uppercase small">
-                                            ADMIN / MODIFY DATA
+                                            {% if user.role == 'admin' or user.is_superuser %}ADMIN / MODIFY DATA{% else %}MODIFY DATA{% endif %}
                                         </a>
                                     {% endif %}
                                 {% else %}
@@ -247,11 +247,11 @@
 <style>
     .bg-light-soft { background-color: #f8fafc; }
     .border-light-soft { border-color: #f1f5f9 !important; }
-    .text-dark-blue { color: #0f172a; }
-    .btn-dark-blue { background-color: #0f172a; color: white; border: none; }
+    .text-dark-blue { color: #212529; }
+    .btn-dark-blue { background-color: #212529; color: white; border: none; }
     .btn-dark-blue:hover { background-color: #000; color: white; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
-    .btn-outline-dark-blue { border: 2px solid #0f172a; color: #0f172a; background: transparent; }
-    .btn-outline-dark-blue:hover { background: #0f172a; color: white; }
+    .btn-outline-dark-blue { border: 2px solid #212529; color: #212529; background: transparent; }
+    .btn-outline-dark-blue:hover { background: #212529; color: white; }
     .fw-black { font-weight: 900; }
     .ls-neg-1 { letter-spacing: -1px; }
     .ls-neg-2 { letter-spacing: -2px; }

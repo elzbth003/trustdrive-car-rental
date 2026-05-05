@@ -1,14 +1,14 @@
 :root {
-    --primary-color: #0f172a;
+    --primary-color: #212529;
     /* Deep Charcoal Navy */
-    --accent-color: #6082B6;
+    --accent-color: #6c757d;
     /* Elegant Glaucous Blue */
     --bg-main: #ffffff;
     --bg-soft: #f8fafc;
     --bg-glass: rgba(255, 255, 255, 0.9);
-    --text-main: #1e293b;
+    --text-main: #343a40;
     /* Elegant Slate 800 */
-    --text-muted: #021e45;
+    --text-muted: #495057;
     /* Sophisticated Slate 500 */
     --border-light: #e2e8f0;
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -190,8 +190,8 @@ h4 {
 }
 
 .btn-primary:hover {
-    background: #1e293b;
-    border-color: #1e293b;
+    background: #343a40;
+    border-color: #343a40;
     color: white;
     transform: none;
     box-shadow: var(--shadow-md);
@@ -247,11 +247,13 @@ h4 {
 }
 
 .accent-bar {
-    width: 60px;
-    height: 4px;
-    background: var(--accent-color) !important;
+    width: 80px;
+    height: 3px;
+    background: url('https://images.unsplash.com/photo-1514316454349-750a7fd3da3a?q=80&w=200') center/cover;
+    filter: brightness(0.6) blur(0.5px);
     margin: 1.5rem 0;
-    border-radius: 2px;
+    border-radius: 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 /* Watermark Minimalist */
@@ -485,22 +487,22 @@ footer h6 {
 }
 
 /* Dark Blue utility classes */
-.bg-dark-blue  { background-color: #0f172a !important; }
-.text-dark-blue { color: #0f172a !important; }
-.border-dark-blue { border-color: #0f172a !important; }
+.bg-dark-blue  { background-color: #212529 !important; }
+.text-dark-blue { color: #212529 !important; }
+.border-dark-blue { border-color: #212529 !important; }
 
 /* Emerald Accent utilities — actual brand colour used in new design */
-.bg-accent     { background-color: #10b981 !important; }
-.text-accent-em { color: #10b981 !important; }
-.border-accent  { border-color: #10b981 !important; }
+.bg-accent     { background-color: #eab308 !important; }
+.text-accent-em { color: #eab308 !important; }
+.border-accent  { border-color: #eab308 !important; }
 
 /* Light soft background */
 .bg-light-soft { background-color: #f8fafc !important; }
 
 /* Dark-blue filled button */
 .btn-dark-blue {
-    background-color: #0f172a;
-    border: 1.5px solid #0f172a;
+    background-color: #212529;
+    border: 1.5px solid #212529;
     color: #ffffff;
     font-weight: 700;
     letter-spacing: 1px;
@@ -508,38 +510,38 @@ footer h6 {
     transition: all 0.3s ease;
 }
 .btn-dark-blue:hover {
-    background-color: #1e293b;
-    border-color: #1e293b;
+    background-color: #343a40;
+    border-color: #343a40;
     color: #ffffff;
 }
 
 /* Outline dark-blue button */
 .btn-outline-dark-blue {
     background-color: transparent;
-    border: 1.5px solid #0f172a;
-    color: #0f172a;
+    border: 1.5px solid #212529;
+    color: #212529;
     font-weight: 700;
     letter-spacing: 1px;
     border-radius: 0;
     transition: all 0.3s ease;
 }
 .btn-outline-dark-blue:hover {
-    background-color: #0f172a;
+    background-color: #212529;
     color: #ffffff;
 }
 
 /* Accent (Emerald) button */
 .btn-accent {
-    background-color: #10b981;
-    border: 1.5px solid #10b981;
+    background-color: #eab308;
+    border: 1.5px solid #eab308;
     color: #ffffff;
     font-weight: 700;
     border-radius: 0;
     transition: all 0.3s ease;
 }
 .btn-accent:hover {
-    background-color: #059669;
-    border-color: #059669;
+    background-color: #ca8a04;
+    border-color: #ca8a04;
     color: #ffffff;
 }
 

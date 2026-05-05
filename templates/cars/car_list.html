@@ -75,12 +75,7 @@
                         </form>
                     </div>
 
-                    <!-- Quick Support Card -->
-                    <div class="mt-4 p-4 bg-dark-blue rounded-4 text-white reveal reveal-up stagger-delay-1">
-                        <h6 class="fw-bold mb-3 ls-1 uppercase small">Need Assistance?</h6>
-                        <p class="extra-small opacity-75 mb-4">Contact our 24/7 concierge for personalized vehicle matching.</p>
-                        <a href="#" class="btn btn-outline-light btn-sm w-100 rounded-pill py-2 fw-bold ls-1">SPEAK TO AGENT</a>
-                    </div>
+
                 </div>
             </div>
 
@@ -197,7 +192,7 @@
                                     <div class="extra-small text-muted fw-bold ls-1 uppercase">
                                         <i class="bi bi-shield-check text-success me-1"></i> Full Insurance
                                     </div>
-                                    <a href="{% url 'car_detail' car.pk %}" class="btn btn-accent px-4 py-2 fw-bold rounded-pill ls-1 transition-all-300 transform-hover-up shadow-sm" style="font-size: 0.75rem;">
+                                    <a href="{% url 'car_detail' car.pk %}" class="btn bg-white text-dark px-4 py-2 fw-black rounded-pill ls-1 transition-all-300 transform-hover-up" style="box-shadow: 0 4px 15px rgba(0,0,0,0.08); font-size: 0.75rem; border: 1px solid #eaeaea; display: inline-flex; align-items: center; justify-content: center; min-width: 130px; letter-spacing: 1.5px;">
                                         BOOK NOW
                                     </a>
                                 </div>
@@ -240,8 +235,8 @@
 <style>
     .bg-light-soft { background-color: #f8fafc; }
     .border-light-soft { border-color: #f1f5f9 !important; }
-    .text-dark-blue { color: #0f172a; }
-    .btn-dark-blue { background-color: #0f172a; color: white; }
+    .text-dark-blue { color: #212529; }
+    .btn-dark-blue { background-color: #212529; color: white; }
     .btn-dark-blue:hover { background-color: #000; color: white; }
     .fw-black { font-weight: 900; }
     .ls-neg-1 { letter-spacing: -1px; }
