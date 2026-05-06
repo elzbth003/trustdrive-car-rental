@@ -22,9 +22,11 @@
     <div class="container-fluid px-lg-5">
         <div class="row g-5">
             <!-- Professional Sidebar Filters -->
-            <div class="col-xl-3 col-lg-4">
+            <div class="col-xl-3 col-lg-4 sidebar-filters" id="sidebarFilters">
                 <div class="sticky-top" style="top: 110px;">
-                    <div class="p-4 bg-white border border-light shadow-2xl rounded-4 reveal reveal-left">
+                    <div class="p-4 bg-white border border-light shadow-2xl rounded-4 reveal reveal-left position-relative">
+                        <!-- Close button for mobile -->
+                        <button type="button" class="btn-close d-lg-none position-absolute top-0 end-0 m-3" id="closeFilters" aria-label="Close"></button>
                         <div class="d-flex align-items-center justify-content-between mb-4">
                             <h6 class="fw-bold mb-0 uppercase ls-2 text-dark-blue">Refine Search</h6>
                             <i class="bi bi-sliders text-accent"></i>
@@ -231,6 +233,40 @@
         </div>
     </div>
 </section>
+
+<!-- Mobile Filter Toggle -->
+<button class="filter-toggle-btn" id="openFilters">
+    <i class="bi bi-sliders fs-4"></i>
+</button>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const openBtn = document.getElementById('openFilters');
+    const closeBtn = document.getElementById('closeFilters');
+    const sidebar = document.getElementById('sidebarFilters');
+    const overlay = document.getElementById('sidebarOverlay');
+
+    if (openBtn && sidebar && overlay) {
+        openBtn.addEventListener('click', () => {
+            sidebar.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        const closeSidebar = () => {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        };
+
+        closeBtn.addEventListener('click', closeSidebar);
+        overlay.addEventListener('click', closeSidebar);
+    }
+});
+</script>
+{% endblock %}
 
 <style>
     .bg-light-soft { background-color: #f8fafc; }

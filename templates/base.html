@@ -29,33 +29,18 @@
                 <span class="td-brand-text fw-bold">TRUST</span><span class="fw-black" style="color: #6c757d;">DRIVE</span>
             </a>
 
-            <!-- Mobile Toggler -->
-            <button class="navbar-toggler border-0 shadow-none p-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-label="Toggle navigation">
-                <div class="td-hamburger">
-                    <span class="td-bar"></span>
-                    <span class="td-bar"></span>
-                    <span class="td-bar"></span>
-                </div>
-            </button>
-
-            <!-- Links + CTA -->
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto gap-1">
-                    <li class="nav-item"><a class="nav-link td-nav-link" href="{% url 'home' %}">Home</a></li>
-                    <li class="nav-item"><a class="nav-link td-nav-link" href="{% url 'car_list' %}">Fleet</a></li>
-                    <li class="nav-item"><a class="nav-link td-nav-link" href="{% url 'services' %}">Services</a></li>
-                    <li class="nav-item"><a class="nav-link td-nav-link" href="{% url 'about' %}">About</a></li>
-                    <li class="nav-item"><a class="nav-link td-nav-link" href="{% url 'contact' %}">Contact</a></li>
-                </ul>
-
-                <div class="d-flex align-items-center gap-3">
+            <!-- Right Side: Always Visible Auth/Profile + Toggler -->
+            <div class="d-flex align-items-center gap-2 gap-lg-3 ms-auto">
+                
+                <!-- Authentication and Language (Always Visible or mostly visible) -->
+                <div class="d-flex align-items-center gap-2 me-1">
                     {% if user.is_authenticated %}
                         <div class="dropdown">
-                            <a class="td-user-pill dropdown-toggle d-flex align-items-center gap-2 text-decoration-none" href="#" role="button" data-bs-toggle="dropdown">
+                            <a class="td-user-pill dropdown-toggle d-flex align-items-center gap-2 text-decoration-none" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <div class="td-avatar">{{ user.username|slice:":1"|upper }}</div>
                                 <span class="td-uname d-none d-lg-block">{{ user.username }}</span>
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-end td-dd border-0 shadow-lg">
+                            <ul class="dropdown-menu dropdown-menu-end td-dd border-0 shadow-lg mt-2">
                                 <li class="px-3 py-2 border-bottom">
                                     <p class="mb-0 small fw-bold text-dark">{{ user.username }}</p>
                                     <p class="mb-0 extra-small text-muted">{{ user.email }}</p>
@@ -63,11 +48,8 @@
                                 {% if user.role == 'admin' or user.is_superuser %}
                                     <li><a class="dropdown-item td-dd-item fw-bold text-accent" href="/admin/"><i class="bi bi-shield-lock me-2"></i>System Admin</a></li>
                                     <li><a class="dropdown-item td-dd-item" href="{% url 'admin_dashboard' %}"><i class="bi bi-grid me-2 text-muted"></i>Admin Dashboard</a></li>
-                                    <li><a class="dropdown-item td-dd-item" href="{% url 'staff_dashboard' %}"><i class="bi bi-people me-2 text-muted"></i>Staff Dashboard</a></li>
-                                    <li><a class="dropdown-item td-dd-item" href="{% url 'maintenance_list' %}"><i class="bi bi-tools me-2 text-muted"></i>Maintenance Logs</a></li>
                                 {% elif user.role == 'staff' %}
                                     <li><a class="dropdown-item td-dd-item" href="{% url 'staff_dashboard' %}"><i class="bi bi-people me-2 text-muted"></i>Staff Dashboard</a></li>
-                                    <li><a class="dropdown-item td-dd-item" href="{% url 'maintenance_list' %}"><i class="bi bi-tools me-2 text-muted"></i>Maintenance Logs</a></li>
                                 {% else %}
                                     <li><a class="dropdown-item td-dd-item" href="{% url 'dashboard' %}"><i class="bi bi-calendar-check me-2 text-accent"></i>My Reservations</a></li>
                                 {% endif %}
@@ -81,17 +63,32 @@
                             </ul>
                         </div>
                     {% else %}
-                        <!-- Authentication and Language -->
-                        <div class="d-flex align-items-center gap-2">
-                            <a href="#" class="td-lang-pill text-decoration-none d-flex align-items-center justify-content-center">
-                                <i class="bi bi-globe2"></i> <span class="ms-1" style="font-size: 0.75rem; font-weight: 600;">EN</span>
-                            </a>
-                            <a href="{% url 'login' %}?next={% url 'car_list' %}" class="td-book-btn td-auth-btn">
-                                Log in / Sign up
-                            </a>
-                        </div>
+                        <a href="{% url 'login' %}?next={% url 'car_list' %}" class="td-book-btn td-auth-btn d-none d-sm-inline-flex">
+                            Log in / Sign up
+                        </a>
+                        <a href="{% url 'login' %}" class="td-book-btn d-sm-none py-2 px-3" style="font-size: 0.75rem;">Login</a>
                     {% endif %}
                 </div>
+
+                <!-- Mobile Toggler -->
+                <button class="navbar-toggler border-0 shadow-none p-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-label="Toggle navigation">
+                    <div class="td-hamburger">
+                        <span class="td-bar"></span>
+                        <span class="td-bar"></span>
+                        <span class="td-bar"></span>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Links (Collapsed) -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto gap-1">
+                    <li class="nav-item"><a class="nav-link td-nav-link" href="{% url 'home' %}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link td-nav-link" href="{% url 'car_list' %}">Fleet</a></li>
+                    <li class="nav-item"><a class="nav-link td-nav-link" href="{% url 'services' %}">Services</a></li>
+                    <li class="nav-item"><a class="nav-link td-nav-link" href="{% url 'about' %}">About</a></li>
+                    <li class="nav-item"><a class="nav-link td-nav-link" href="{% url 'contact' %}">Contact</a></li>
+                </ul>
             </div>
         </div>
     </nav>

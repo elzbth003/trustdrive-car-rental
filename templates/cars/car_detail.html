@@ -52,7 +52,7 @@
                 <!-- Immersive Gallery -->
                 <div class="mb-5">
                     <div id="carGallery" class="carousel slide rounded-0 overflow-hidden shadow-2xl bg-white" data-bs-ride="carousel">
-                        <div class="carousel-inner" style="height: 600px;">
+                        <div class="carousel-inner car-detail-gallery">
                             <div class="carousel-item active h-100">
                                 {% if car.image %}
                                     <img src="{{ car.image.url }}" class="d-block w-100 h-100 object-fit-cover" alt="Exterior View">
@@ -93,22 +93,22 @@
                 <!-- Technical Specs Strip -->
                 <div class="p-4 bg-white shadow-sm border border-light-soft rounded-0 mb-5">
                     <div class="row g-4 text-center">
-                        <div class="col-3 border-end border-light-soft">
+                        <div class="col-6 col-md-3 border-end border-light-soft">
                             <i class="bi bi-gear-wide-connected text-accent fs-4 d-block mb-2"></i>
                             <span class="extra-small fw-bold text-muted uppercase ls-1">Transmission</span>
                             <h6 class="fw-bold text-dark-blue mb-0 mt-1 uppercase">{{ car.get_transmission_display }}</h6>
                         </div>
-                        <div class="col-3 border-end border-light-soft">
+                        <div class="col-6 col-md-3 border-md-end border-light-soft">
                             <i class="bi bi-people text-accent fs-4 d-block mb-2"></i>
                             <span class="extra-small fw-bold text-muted uppercase ls-1">Seating</span>
                             <h6 class="fw-bold text-dark-blue mb-0 mt-1 uppercase">{{ car.seating_capacity }} ADULTS</h6>
                         </div>
-                        <div class="col-3 border-end border-light-soft">
+                        <div class="col-6 col-md-3 border-end border-light-soft">
                             <i class="bi bi-fuel-pump text-accent fs-4 d-block mb-2"></i>
                             <span class="extra-small fw-bold text-muted uppercase ls-1">Fuel Type</span>
                             <h6 class="fw-bold text-dark-blue mb-0 mt-1 uppercase">{{ car.get_fuel_type_display }}</h6>
                         </div>
-                        <div class="col-3">
+                        <div class="col-6 col-md-3">
                             <i class="bi bi-speedometer2 text-accent fs-4 d-block mb-2"></i>
                             <span class="extra-small fw-bold text-muted uppercase ls-1">Architecture</span>
                             <h6 class="fw-bold text-dark-blue mb-0 mt-1 uppercase">{{ car.get_car_type_display }}</h6>
@@ -168,8 +168,8 @@
             <!-- Right: Booking Card (Sticky) -->
             <div class="col-xl-4">
                 <div class="sticky-top" style="top: 110px; z-index: 10;">
-                    <div class="bg-white rounded-0 shadow-2xl border border-light-soft overflow-hidden p-5 reveal reveal-right">
-                        <div class="d-flex justify-content-between align-items-start mb-5 pb-4 border-bottom border-light-soft">
+                    <div class="bg-white rounded-0 shadow-2xl border border-light-soft overflow-hidden p-4 p-md-5 reveal reveal-right">
+                        <div class="d-flex justify-content-between align-items-start mb-4 mb-md-5 pb-4 border-bottom border-light-soft">
                             <div>
                                 <h2 class="fw-black text-dark-blue mb-0 ls-neg-1">₹{{ car.daily_rate|floatformat:0 }} <small class="text-muted fw-normal h6 ls-0">/ day</small></h2>
                             </div>
@@ -274,6 +274,23 @@
         transform: translateZ(0);
         -webkit-font-smoothing: antialiased;
         filter: contrast(1.01) saturate(1.02); /* Subtle pop for quality feel */
+    }
+
+    .car-detail-gallery {
+        height: 600px;
+    }
+
+    @media (max-width: 991px) {
+        .car-detail-gallery {
+            height: 400px;
+        }
+        .border-md-end { border-right: none !important; }
+    }
+
+    @media (max-width: 576px) {
+        .car-detail-gallery {
+            height: 250px;
+        }
     }
 </style>
 {% endblock %}
