@@ -29,16 +29,35 @@
                 <span class="td-brand-text fw-bold">TRUST</span><span class="fw-black" style="color: #6c757d;">DRIVE</span>
             </a>
 
-            <!-- Right Side: Always Visible Auth/Profile + Toggler -->
-            <div class="d-flex align-items-center gap-2 gap-lg-3 ms-auto">
-                
-                <!-- Authentication and Language (Always Visible or mostly visible) -->
-                <div class="d-flex align-items-center gap-2 me-1">
+            <!-- Mobile Toggler (only visible on mobile) -->
+            <button class="navbar-toggler border-0 shadow-none p-2 d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-label="Toggle navigation">
+                <div class="td-hamburger">
+                    <span class="td-bar"></span>
+                    <span class="td-bar"></span>
+                    <span class="td-bar"></span>
+                </div>
+            </button>
+
+            <!-- Links + Profile (collapsed on mobile) -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Nav Links — centered on desktop -->
+                <ul class="navbar-nav mx-auto gap-1">
+                    <li class="nav-item"><a class="nav-link td-nav-link" href="{% url 'home' %}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link td-nav-link" href="{% url 'car_list' %}">Fleet</a></li>
+                    <li class="nav-item"><a class="nav-link td-nav-link" href="{% url 'services' %}">Services</a></li>
+                    <li class="nav-item"><a class="nav-link td-nav-link" href="{% url 'about' %}">About</a></li>
+                    <li class="nav-item"><a class="nav-link td-nav-link" href="{% url 'contact' %}">Contact</a></li>
+                </ul>
+
+                <!-- Right-end: Profile / Auth -->
+                <div class="d-flex align-items-center gap-2 ms-lg-auto mt-3 mt-lg-0">
                     {% if user.is_authenticated %}
                         <div class="dropdown">
                             <a class="td-user-pill dropdown-toggle d-flex align-items-center gap-2 text-decoration-none" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <div class="td-avatar">{{ user.username|slice:":1"|upper }}</div>
-                                <span class="td-uname d-none d-lg-block">{{ user.username }}</span>
+                                <div class="td-avatar">
+                                    <i class="bi bi-person-fill"></i>
+                                </div>
+                                <span class="td-uname">{{ user.username }}</span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end td-dd border-0 shadow-lg mt-2">
                                 <li class="px-3 py-2 border-bottom">
@@ -63,32 +82,45 @@
                             </ul>
                         </div>
                     {% else %}
-                        <a href="{% url 'login' %}?next={% url 'car_list' %}" class="td-book-btn td-auth-btn d-none d-sm-inline-flex">
+                        <a href="{% url 'login' %}?next={% url 'car_list' %}" class="td-book-btn">
                             Log in / Sign up
                         </a>
-                        <a href="{% url 'login' %}" class="td-book-btn d-sm-none py-2 px-3" style="font-size: 0.75rem;">Login</a>
                     {% endif %}
                 </div>
-
-                <!-- Mobile Toggler -->
-                <button class="navbar-toggler border-0 shadow-none p-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-label="Toggle navigation">
-                    <div class="td-hamburger">
-                        <span class="td-bar"></span>
-                        <span class="td-bar"></span>
-                        <span class="td-bar"></span>
-                    </div>
-                </button>
             </div>
 
-            <!-- Links (Collapsed) -->
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto gap-1">
-                    <li class="nav-item"><a class="nav-link td-nav-link" href="{% url 'home' %}">Home</a></li>
-                    <li class="nav-item"><a class="nav-link td-nav-link" href="{% url 'car_list' %}">Fleet</a></li>
-                    <li class="nav-item"><a class="nav-link td-nav-link" href="{% url 'services' %}">Services</a></li>
-                    <li class="nav-item"><a class="nav-link td-nav-link" href="{% url 'about' %}">About</a></li>
-                    <li class="nav-item"><a class="nav-link td-nav-link" href="{% url 'contact' %}">Contact</a></li>
-                </ul>
+            <!-- Mobile: show profile pill always visible next to toggler -->
+            <div class="d-flex align-items-center gap-2 ms-auto d-lg-none">
+                {% if user.is_authenticated %}
+                    <div class="dropdown">
+                        <a class="td-user-pill-mini dropdown-toggle text-decoration-none d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle fs-4"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end td-dd border-0 shadow-lg mt-2">
+                            <li class="px-3 py-2 border-bottom">
+                                <p class="mb-0 small fw-bold text-dark">{{ user.username }}</p>
+                                <p class="mb-0 extra-small text-muted">{{ user.email }}</p>
+                            </li>
+                            {% if user.role == 'admin' or user.is_superuser %}
+                                <li><a class="dropdown-item td-dd-item fw-bold text-accent" href="/admin/"><i class="bi bi-shield-lock me-2"></i>System Admin</a></li>
+                                <li><a class="dropdown-item td-dd-item" href="{% url 'admin_dashboard' %}"><i class="bi bi-grid me-2 text-muted"></i>Admin Dashboard</a></li>
+                            {% elif user.role == 'staff' %}
+                                <li><a class="dropdown-item td-dd-item" href="{% url 'staff_dashboard' %}"><i class="bi bi-people me-2 text-muted"></i>Staff Dashboard</a></li>
+                            {% else %}
+                                <li><a class="dropdown-item td-dd-item" href="{% url 'dashboard' %}"><i class="bi bi-calendar-check me-2 text-accent"></i>My Reservations</a></li>
+                            {% endif %}
+                            <li><hr class="dropdown-divider my-1"></li>
+                            <li>
+                                <form action="{% url 'logout' %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" class="dropdown-item td-dd-item text-danger"><i class="bi bi-box-arrow-right me-2"></i>Logout</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                {% else %}
+                    <a href="{% url 'login' %}" class="td-book-btn py-2 px-3" style="font-size:0.75rem;">Login</a>
+                {% endif %}
             </div>
         </div>
     </nav>
@@ -255,15 +287,17 @@
 
     /* ── Avatar ── */
     .td-avatar {
-        width: 30px; height: 30px;
+        width: 34px; height: 34px;
         background: #eab308;
         color: #fff;
-        font-size: 0.7rem;
+        font-size: 1rem;
         font-weight: 800;
         display: flex; align-items: center; justify-content: center;
-        border-radius: 0;
+        border-radius: 50%;
         flex-shrink: 0;
+        transition: background 0.3s ease;
     }
+    .td-user-pill:hover .td-avatar { background: #ca8a04; }
     .td-user-pill  { font-size: 0.78rem; font-weight: 600; text-decoration: none; }
     .td-uname      { font-size: 0.78rem; font-weight: 600; }
 

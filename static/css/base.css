@@ -82,17 +82,37 @@ h4 {
 }
 
 .td-avatar {
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     background: #eab308;
     color: white;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 800;
-    font-size: 0.8rem;
+    font-size: 1rem;
+    flex-shrink: 0;
+    transition: background 0.3s ease;
 }
+
+.td-user-pill:hover .td-avatar {
+    background: #ca8a04;
+}
+
+/* Mobile icon-only pill */
+.td-user-pill-mini {
+    color: inherit;
+    padding: 4px;
+    line-height: 1;
+    transition: opacity 0.2s ease;
+}
+
+.td-user-pill-mini:hover {
+    opacity: 0.75;
+}
+
+.td-navbar--transparent .td-user-pill-mini { color: rgba(255,255,255,0.9); }
+.td-navbar--solid .td-user-pill-mini { color: #212529; }
 
 .td-uname {
     font-weight: 600;
