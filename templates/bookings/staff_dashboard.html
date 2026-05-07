@@ -152,37 +152,6 @@
                                 </ul>
                             </div>
 
-                            <!-- Return Modal -->
-                            {% if booking.status == 'active' %}
-                            <div class="modal fade" id="returnModal{{ booking.id }}" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
-                                        <div class="modal-header bg-soft text-primary border-0 p-4">
-                                            <h5 class="modal-title fw-bold">Process Vehicle Return</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <form action="{% url 'staff_booking_action' booking.id %}" method="post">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="action" value="return">
-                                            <div class="modal-body p-4">
-                                                <div class="mb-4 text-center">
-                                                    <i class="bi bi-speedometer2 display-4 text-primary opacity-50 mb-3 d-block"></i>
-                                                    <p class="small text-muted">Please update the vehicle's current mileage and log any changes.</p>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="extra-small fw-bold text-muted uppercase ls-1 mb-2">Current Mileage (KM)</label>
-                                                    <input type="number" name="current_km" class="form-control form-control-lg border-0 bg-light rounded-3" value="{{ booking.car.current_km }}" required>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer border-0 p-4 pt-0">
-                                                <button type="button" class="btn btn-link text-muted fw-bold text-decoration-none" data-bs-dismiss="modal">CLOSE</button>
-                                                <button type="submit" class="btn btn-primary px-4 py-2 rounded-3 shadow-sm">COMPLETE RETURN</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endif %}
                         </td>
                     </tr>
                     {% empty %}
@@ -199,6 +168,40 @@
         </div>
     </div>
 </div>
+
+<!-- Modals must be outside the table to avoid z-index/backdrop issues -->
+{% for booking in bookings %}
+    {% if booking.status == 'active' %}
+    <div class="modal fade" id="returnModal{{ booking.id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
+                <div class="modal-header bg-soft text-primary border-0 p-4">
+                    <h5 class="modal-title fw-bold">Process Vehicle Return</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{% url 'staff_booking_action' booking.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="return">
+                    <div class="modal-body p-4">
+                        <div class="mb-4 text-center">
+                            <i class="bi bi-speedometer2 display-4 text-primary opacity-50 mb-3 d-block"></i>
+                            <p class="small text-muted">Please update the vehicle's current mileage and log any changes.</p>
+                        </div>
+                        <div class="mb-3">
+                            <label class="extra-small fw-bold text-muted uppercase ls-1 mb-2">Current Mileage (KM)</label>
+                            <input type="number" name="current_km" class="form-control form-control-lg border-0 bg-light rounded-3" value="{{ booking.car.current_km }}" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 p-4 pt-0">
+                        <button type="button" class="btn btn-link text-muted fw-bold text-decoration-none" data-bs-dismiss="modal">CLOSE</button>
+                        <button type="submit" class="btn btn-primary px-4 py-2 rounded-3 shadow-sm">COMPLETE RETURN</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+{% endfor %}
 
 <style>
     .avatar-circle {
