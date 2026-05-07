@@ -71,29 +71,26 @@
                     {% if messages %}
                         {% for message in messages %}
                             <div class="alert alert-{{ message.tags }} border-0 shadow-sm mb-4" role="alert">
+                                <i class="bi bi-check-circle-fill me-2"></i>
                                 {{ message }}
                             </div>
                         {% endfor %}
                     {% endif %}
 
-                    <div id="contactSuccessAlert" class="alert alert-success border-0 shadow-sm mb-4 d-none" role="alert">
-                        <i class="bi bi-check-circle-fill me-2"></i>
-                        <strong>Message sent!</strong> We'll get back to you within 24 hours.
-                    </div>
-
-                    <form id="contactForm" onsubmit="return handleContactSubmit(event)">
+                    <form method="post" action="{% url 'contact' %}">
+                        {% csrf_token %}
                         <div class="row g-4">
                             <div class="col-md-6">
                                 <label class="small fw-bold text-muted mb-2">FULL NAME</label>
-                                <input type="text" class="form-control" placeholder="Enter your name" required>
+                                <input type="text" name="name" class="form-control" placeholder="Enter your name" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="small fw-bold text-muted mb-2">EMAIL ADDRESS</label>
-                                <input type="email" class="form-control" placeholder="Enter your email" required>
+                                <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
                             </div>
                             <div class="col-md-12">
                                 <label class="small fw-bold text-muted mb-2">SUBJECT</label>
-                                <select class="form-select py-3 rounded-0 bg-light border-0">
+                                <select name="subject" class="form-select py-3 rounded-0 bg-light border-0">
                                     <option>General Inquiry</option>
                                     <option>Corporate Partnership</option>
                                     <option>Fleet Support</option>
@@ -102,35 +99,13 @@
                             </div>
                             <div class="col-md-12">
                                 <label class="small fw-bold text-muted mb-2">MESSAGE</label>
-                                <textarea class="form-control" rows="5" placeholder="How can we assist you?" required></textarea>
+                                <textarea name="message" class="form-control" rows="5" placeholder="How can we assist you?" required></textarea>
                             </div>
                             <div class="col-12">
-                                <button type="submit" class="btn btn-primary px-5 py-3" id="contactSubmitBtn">SEND MESSAGE</button>
+                                <button type="submit" class="btn btn-primary px-5 py-3">SEND MESSAGE</button>
                             </div>
                         </div>
                     </form>
-
-                    <script>
-                    function handleContactSubmit(e) {
-                        e.preventDefault();
-                        var btn = document.getElementById('contactSubmitBtn');
-                        btn.innerHTML = '<i class="bi bi-check-lg me-2"></i>SENT!';
-                        btn.classList.remove('btn-primary');
-                        btn.classList.add('btn-success');
-                        btn.disabled = true;
-                        document.getElementById('contactSuccessAlert').classList.remove('d-none');
-                        document.getElementById('contactForm').reset();
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                        setTimeout(function() {
-                            btn.innerHTML = 'SEND MESSAGE';
-                            btn.classList.remove('btn-success');
-                            btn.classList.add('btn-primary');
-                            btn.disabled = false;
-                            document.getElementById('contactSuccessAlert').classList.add('d-none');
-                        }, 5000);
-                        return false;
-                    }
-                    </script>
                 </div>
             </div>
         </div>

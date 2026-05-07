@@ -1,9 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, DeleteView
+from django.views import View
 from django.urls import reverse_lazy
 from django.db.models import Q, F, Count
 from django.contrib import messages
-from .models import Car, MaintenanceLog, Review, Favorite
+from .models import Car, MaintenanceLog, Review, Favorite, ContactMessage
 from .forms import CarForm, MaintenanceLogForm   # single consolidated import
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
@@ -23,8 +24,25 @@ class AboutView(TemplateView):
 class ServicesView(TemplateView):
     template_name = 'cars/services.html'
 
-class ContactView(TemplateView):
-    template_name = 'cars/contact.html'
+class ContactView(View):
+    def get(self, request):
+        return render(request, 'cars/contact.html')
+
+    def post(self, request):
+        name = request.POST.get('name', '').strip()
+        email = request.POST.get('email', '').strip()
+        subject = request.POST.get('subject', 'General Inquiry')
+        message = request.POST.get('message', '').strip()
+
+        if name and email and message:
+            ContactMessage.objects.create(
+                name=name, email=email, subject=subject, message=message
+            )
+            messages.success(request, "Message sent! We'll get back to you within 24 hours.")
+        else:
+            messages.error(request, "Please fill in all fields.")
+
+        return redirect('contact')
 
 class CarListView(ListView):
     model = Car
