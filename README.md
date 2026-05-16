@@ -2,7 +2,7 @@
 
 A premium Car Rental Management System built with Django and MySQL.
 
-## 🚀 Features
+## Features
 - **Modern UI**: Dark-themed, glassmorphism design with responsive layout.
 - **Three Core Modules**: 
   - **Admin**: Full control over fleet, users, and bookings.
@@ -43,7 +43,7 @@ python manage.py createsuperuser
 python manage.py run_server
 ```
 
-## 📂 Project Structure
+## Project Structure
 - `accounts/`: User management and role-based auth.
 - `cars/`: Vehicle listings, search, and CRUD.
 - `bookings/`: Booking logic and history.
@@ -51,7 +51,7 @@ python manage.py run_server
 - `templates/`: Shared and app-specific modern templates.
 - `static/css/base.css`: The custom design system.
 
-## 🔷 Technology Stack
+## Technology Stack
 - **Backend**: Django 6.0
 - **Database**: MySQL
 - **Frontend**: Bootstrap 5, Vanilla CSS, Inter Fonts, Bootstrap Icons
